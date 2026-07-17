@@ -7,17 +7,13 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field
 
+from app.core.money import format_mdl
+
 # 50 MDL. Below this the card fees would exceed the top-up.
 MIN_TOPUP_BANI = 5000
 # 100 000 MDL. Not a business rule so much as a guard: a top-up this large is
 # a typo or a test, and either way it deserves a human.
 MAX_TOPUP_BANI = 10_000_000
-
-
-def format_mdl(bani: int) -> str:
-    """90000 -> "900". Negative amounts keep their sign."""
-    sign = "-" if bani < 0 else ""
-    return sign + f"{abs(bani) // 100:,}".replace(",", " ")
 
 
 class BalanceResponse(BaseModel):

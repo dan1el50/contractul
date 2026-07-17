@@ -8,8 +8,9 @@ enforces.
 > constrains everything around it. Implementing it whole would mean building tables for
 > features that are not yet specified.
 >
-> Implemented so far: `users`, `sessions`. Everything else is the specification for its
-> phase.
+> Implemented so far: `users`, `sessions`, `categories`, `contract_templates`,
+> `template_versions`, `payment_cards`, `wallet_transactions`, `carts`, `cart_items`,
+> `orders`, `order_items`. Remaining: `companies` (phase 8) and `documents` (phase 7).
 
 ## Principles
 

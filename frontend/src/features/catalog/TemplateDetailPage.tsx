@@ -10,9 +10,11 @@
  */
 
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { BrowseLayout } from '@/app/layouts/BrowseLayout'
+import { useAuth } from '@/features/auth/AuthContext'
+import { useCart } from '@/features/cart/CartContext'
 import { ApiError } from '@/lib/api-client'
 
 import { fetchTemplate, previewUrl, type TemplateDetail } from './api'
@@ -28,8 +30,37 @@ const INCLUDED = [
 
 export function TemplateDetailPage() {
   const { slug = '' } = useParams()
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const { add } = useCart()
+
   const [template, setTemplate] = useState<TemplateDetail | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [adding, setAdding] = useState(false)
+  const [cartError, setCartError] = useState<string | null>(null)
+
+  async function handleAddToCart() {
+    // A signed-out visitor can browse, but buying needs an account. Send them
+    // to sign in rather than failing the request they cannot make.
+    if (!user) {
+      navigate('/autentificare')
+      return
+    }
+    setAdding(true)
+    setCartError(null)
+    try {
+      await add(slug)
+      navigate('/cos')
+    } catch (caught) {
+      setCartError(
+        caught instanceof ApiError && caught.status === 409
+          ? 'Deții deja acest contract.'
+          : 'Nu am putut adăuga contractul în coș.',
+      )
+    } finally {
+      setAdding(false)
+    }
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -184,17 +215,24 @@ export function TemplateDetailPage() {
             </p>
           </div>
 
-          {/* The cart arrives in phase 6. Disabled rather than absent, so the
-              panel reads the way it will — and so nobody thinks it is broken. */}
-          <button type="button" className={styles.addToCart} disabled title="Disponibil în curând">
+          <button
+            type="button"
+            className={styles.addToCart}
+            onClick={() => void handleAddToCart()}
+            disabled={adding}
+          >
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" aria-hidden="true">
               <circle cx="9" cy="20" r="1.4" />
               <circle cx="18" cy="20" r="1.4" />
               <path d="M2 3h3l2.4 12.4a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L22 7H6" />
             </svg>
-            Adaugă în coș
+            {adding ? 'Se adaugă…' : user ? 'Adaugă în coș' : 'Autentifică-te pentru a cumpăra'}
           </button>
-          <p className={styles.soon}>Coșul și plata vin în faza 6.</p>
+          {cartError && (
+            <p className={styles.soon} role="alert">
+              {cartError}
+            </p>
+          )}
 
           <div className={styles.divider} />
           <p className={styles.verified}>

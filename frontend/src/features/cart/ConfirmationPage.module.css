@@ -1,0 +1,153 @@
+.wrap {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.hero {
+  border-radius: 18px 18px 0 0;
+  background: linear-gradient(140deg, #002e62, var(--color-navy));
+  padding: 44px 40px 40px;
+  text-align: center;
+}
+
+.check {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: var(--color-teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(12, 120, 118, 0.45);
+}
+
+.kicker {
+  color: var(--color-amber);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-top: 22px;
+}
+
+.heroTitle {
+  color: #fff;
+  font-size: 25px;
+  font-weight: 700;
+  margin-top: 9px;
+  letter-spacing: -0.015em;
+}
+
+.heroText {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  margin-top: 9px;
+  line-height: 1.55;
+}
+
+.body {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 18px 18px;
+  padding: 32px 40px 36px;
+}
+
+.receipt {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #f1f3f6;
+  font-size: 13.5px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.row dt {
+  color: var(--color-text-muted);
+}
+
+.row dd {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.strong {
+  color: var(--color-navy) !important;
+  font-weight: 700 !important;
+}
+
+.items {
+  list-style: none;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13.5px;
+  color: #1a2b45;
+}
+
+.itemPrice {
+  font-weight: 600;
+}
+
+.pending {
+  display: flex;
+  gap: 11px;
+  margin-top: 22px;
+  padding: 14px;
+  background: #eef3fb;
+  border-radius: 11px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  color: #1a2b45;
+  line-height: 1.55;
+}
+
+.pending svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.actions {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.link {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-blue);
+}
+
+.error {
+  padding: var(--space-3);
+  background: #fdf2f2;
+  border: 1px solid #f5c6c6;
+  border-radius: var(--radius-control);
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+.back {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-blue);
+}
+
+.loading {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}

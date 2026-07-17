@@ -12,6 +12,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import { AuthPage } from '@/features/auth/AuthPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
+import { CartPage } from '@/features/cart/CartPage'
+import { ConfirmationPage } from '@/features/cart/ConfirmationPage'
 import { CatalogPage } from '@/features/catalog/CatalogPage'
 import { TemplateDetailPage } from '@/features/catalog/TemplateDetailPage'
 import { LandingPage } from '@/features/marketing/LandingPage'
@@ -39,6 +41,22 @@ export function Router() {
           element={
             <RequireAuth>
               <AddCardPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/cos"
+          element={
+            <RequireAuth>
+              <CartPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/comanda/:orderId"
+          element={
+            <RequireAuth>
+              <ConfirmationPage />
             </RequireAuth>
           }
         />

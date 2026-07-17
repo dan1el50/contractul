@@ -201,24 +201,43 @@ Three things worth carrying forward:
 The prototype's "bonus până la 20% la alimentare" is **not** implemented. Nobody specified
 a bonus scheme, and inventing one in the UI would be inventing a business rule.
 
-### 6 — Cart and checkout
+### 6 — Cart and checkout ✅ DONE
 
 **Branch:** `feat/checkout`
 
-The money path.
-
-- Server-side cart
-- Checkout in a single transaction: verify balance, debit wallet, record order
-- `Cos` and `Confirmare` screens
+The money path. Verified end to end in a real browser: fund the wallet, add a contract,
+pay from the wallet, land on a receipt with a real order number.
 
 **Retires:** `Cos.dc.html`, `Confirmare.dc.html`
 
-**Done when:** a purchase either fully happens or fully does not, proven by a test that
-fails mid-transaction.
+Delivered:
 
-**Note:** the prototype's cart and confirmation screens disagree with each other — the
-cart checks out two items for 1 700 MDL, the receipt shows one for 900. Resolve this
-deliberately when building; do not copy either side by accident.
+- `carts`/`cart_items` and `orders`/`order_items`, migration `0006_orders`, and a plain
+  PostgreSQL sequence for `CT-{year}-{n}` numbers (gaps allowed, as decided)
+- A server-side cart that holds template ids and reads prices live from the catalog
+- `checkout()` in one transaction: snapshot the lines, create the order, debit the wallet,
+  empty the cart — all or nothing
+- Cart, order, and money schemas with the VAT split derived for display
+- `Coș` and `Confirmare` screens, a cart context feeding a sidebar badge, and the detail
+  page's "add to cart" wired up
+
+Four things worth carrying forward:
+
+- **Atomicity is proven against a real connection, not the shared test session.** The shared
+  session's `commit` is not a durable boundary, so a rollback there erases the test's own
+  setup; proving a rollback restores a *committed* balance needs separate transactions. Two
+  tests do it: an insufficient-funds failure (which fails after the order is flushed) and an
+  injected failure *after* a successful debit — the harder case, where the money must come
+  back with the order.
+- **The renderer serialised a lazy relationship outside async context.** Building the order
+  response touched `order.items`, which triggered a lazy load and a `MissingGreenlet`. Fixed
+  by populating the collection through the relationship, and `paid_at` is a real datetime,
+  not an unresolved `func.now()`.
+- **The prototype's cart and confirmation disagreed** — the cart totals two items at
+  1 700 MDL, the receipt shows one at 900. Neither was copied; both screens read the real
+  order.
+- **The confirmation screen is honest about phase 7.** No document downloads (not built),
+  no "factură fiscală" (we issue none), and the method is the wallet, not a card.
 
 ### 7 — Document generation
 
