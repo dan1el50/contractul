@@ -7,17 +7,30 @@ what they claim to.
 from __future__ import annotations
 
 import uuid
+from pathlib import Path
 
 from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.catalog import Category
 from app.models.order import Order, OrderItem
 from app.models.user import User
 
 from .factories import create_template
 
 PASSWORD = "parola-mea-sigura-2026"
+
+# A real, convertible .docx — the same placeholder the seed uses.
+FIXTURE_DOCX = Path("tests/fixtures/activare-2fa.docx")
+DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+
+async def _a_category(session: AsyncSession) -> Category:
+    category = Category(slug="servicii", name="Servicii & Colaborare")
+    session.add(category)
+    await session.flush()
+    return category
 
 
 async def _register(client: AsyncClient, email: str) -> None:
@@ -198,3 +211,126 @@ async def test_publishing_an_unknown_template_is_404(
     )
 
     assert response.status_code == 404
+
+
+# ─── Adding a template (docx upload) ─────────────────────────────────────────
+
+
+async def test_admin_adds_a_template_by_uploading_a_docx(
+    client: AsyncClient, session: AsyncSession
+) -> None:
+    await _become_admin(client, session)
+    category = await _a_category(session)
+
+    response = await client.post(
+        "/api/v1/admin/templates",
+        data={
+            "name": "Contract nou de test",
+            "category_id": str(category.id),
+            "description": "Un contract adăugat de admin.",
+            "price_bani": "90000",
+            "languages": "ro,ru",
+            "is_published": "true",
+        },
+        files={"file": ("nou.docx", FIXTURE_DOCX.read_bytes(), DOCX_MIME)},
+    )
+
+    assert response.status_code == 201, response.text
+    body = response.json()
+    assert body["name"] == "Contract nou de test"
+    assert body["price_mdl"] == "900"
+    assert body["is_published"] is True
+    # It shows up for the admin and, being published, in the public catalog.
+    admin_slugs = {t["slug"] for t in (await client.get("/api/v1/admin/templates")).json()}
+    public_slugs = {t["slug"] for t in (await client.get("/api/v1/templates")).json()}
+    assert body["slug"] in admin_slugs
+    assert body["slug"] in public_slugs
+
+
+async def test_uploading_a_file_that_is_not_a_docx_is_rejected(
+    client: AsyncClient, session: AsyncSession
+) -> None:
+    """Validation by rendering: a non-.docx cannot become a catalog entry."""
+    await _become_admin(client, session)
+    category = await _a_category(session)
+
+    response = await client.post(
+        "/api/v1/admin/templates",
+        data={
+            "name": "Fișier stricat",
+            "category_id": str(category.id),
+            "description": "x",
+            "price_bani": "90000",
+            "languages": "ro",
+        },
+        files={"file": ("bad.docx", b"this is plainly not a docx", "application/octet-stream")},
+    )
+
+    assert response.status_code == 400
+
+
+async def test_adding_a_template_requires_admin(
+    client: AsyncClient, session: AsyncSession
+) -> None:
+    await _register(client, "ion@nordconstruct.md")
+    category = await _a_category(session)
+
+    response = await client.post(
+        "/api/v1/admin/templates",
+        data={
+            "name": "Nepermis",
+            "category_id": str(category.id),
+            "description": "x",
+            "price_bani": "90000",
+            "languages": "ro",
+        },
+        files={"file": ("t.docx", FIXTURE_DOCX.read_bytes(), DOCX_MIME)},
+    )
+
+    assert response.status_code == 403
+
+
+# ─── Removing a template ─────────────────────────────────────────────────────
+
+
+async def test_admin_deletes_a_template_with_no_sales(
+    client: AsyncClient, session: AsyncSession
+) -> None:
+    await _become_admin(client, session)
+    template = await create_template(session, slug="de-sters", price_bani=90000)
+
+    response = await client.delete(f"/api/v1/admin/templates/{template.id}")
+
+    assert response.status_code == 204
+    slugs = {t["slug"] for t in (await client.get("/api/v1/admin/templates")).json()}
+    assert "de-sters" not in slugs
+
+
+async def test_deleting_a_sold_template_is_refused(
+    client: AsyncClient, session: AsyncSession
+) -> None:
+    """An order references it, so deleting it would orphan a receipt."""
+    admin = await _become_admin(client, session)
+    template = await create_template(session, slug="vandut", price_bani=90000)
+    version = template.versions[0]
+    await _paid_order(
+        session, user=admin, template_id=template.id, version_id=version.id,
+        number="CT-2026-9100", total_bani=90000, name="Vândut",
+    )
+
+    response = await client.delete(f"/api/v1/admin/templates/{template.id}")
+
+    assert response.status_code == 409
+    # Still there — refused, not silently removed.
+    assert any(t["slug"] == "vandut" for t in (await client.get("/api/v1/admin/templates")).json())
+
+
+async def test_deleting_a_template_requires_admin(
+    client: AsyncClient, session: AsyncSession
+) -> None:
+    await _register(client, "ion@nordconstruct.md")
+    template = await create_template(session, slug="x", price_bani=90000)
+
+    response = await client.delete(f"/api/v1/admin/templates/{template.id}")
+
+    assert response.status_code == 403
