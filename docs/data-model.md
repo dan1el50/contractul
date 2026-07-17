@@ -235,9 +235,17 @@ The ledger. **There is no balance column anywhere.**
 | `order_id` | UUID FK → orders NULL | Set for `purchase`/`refund`. |
 | `provider_charge_id` | TEXT NULL | Set for `topup`. |
 | `description` | TEXT NOT NULL | Shown in the history UI. |
-| `created_at` | TIMESTAMPTZ NOT NULL | |
+| `created_at` | TIMESTAMPTZ NOT NULL | `clock_timestamp()`, **not** `now()` — see below. |
 
 Balance is `SELECT COALESCE(SUM(amount_bani), 0) FROM wallet_transactions WHERE user_id = ?`.
+
+**`created_at` defaults to `clock_timestamp()`, and that difference matters.** PostgreSQL's
+`now()` returns the *transaction start* time, so every row written in one transaction gets
+an identical timestamp. For a ledger that is wrong: the history is ordered by time, and
+identical timestamps leave the order to a tiebreak on a random UUID — the same data then
+renders in a different order on different requests. `clock_timestamp()` reads the real clock
+at insert, so `created_at` means "when this entry happened" rather than "when its
+transaction opened". Every other table keeps `now()`, where the distinction is harmless.
 
 **Why derived rather than stored.** A balance column and a transaction list are two records
 of the same fact, and two records of one fact drift. When they disagree — and eventually

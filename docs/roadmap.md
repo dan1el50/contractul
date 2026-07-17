@@ -160,17 +160,38 @@ resolution. The design's CSS blur is decoration over an image that is already un
 verified in a browser, where page 1 loads 910px wide and page 2 loads 149px. If that blur
 were the protection, deleting one style rule would give the document away.
 
-### 5 — Wallet
+### 5 — Wallet ✅ DONE
 
 **Branch:** `feat/wallet`
 
-- The append-only transaction ledger; balance derived from it, never stored mutable
-- Top-up against `MockPaymentProvider`
-- `Portofel` and `Adauga Card` screens
+Balance, top-ups, saved cards, and history. Verified in a browser: add a card, top up
+2 000 MDL, watch the balance and history change, and have a declined card refused.
 
 **Retires:** `Portofel.dc.html`, `Adauga Card.dc.html`
 
-**Done when:** you can top up and watch the balance and history change.
+Delivered:
+
+- `wallet_transactions` (append-only, no balance column) and `payment_cards`
+- `PaymentProvider` behind an interface; `MockPaymentProvider` with test cards
+- `debit()` with a row lock — the primitive phase 6 checkout will use
+- Wallet and card endpoints, `Portofel` and `Adauga Card` screens
+
+Three things worth carrying forward:
+
+- **The concurrency guard took three attempts to make real.** Racing two tasks with
+  `asyncio.gather` passed with the lock removed — the interleaving never happened.
+  Asserting `SELECT … FOR UPDATE NOWAIT` was refused *also* passed with the lock removed,
+  because inserting a row with a foreign key takes a `FOR KEY SHARE` lock on the parent by
+  itself; the test was measuring PostgreSQL, not us. The surviving test forces the ordering
+  and is verified to fail when the lock is deleted.
+- **`now()` is the transaction start time**, so ledger rows written together shared a
+  timestamp and ordered non-deterministically. Wallet entries use `clock_timestamp()`.
+- **Card details reach our server**, which is a development-only shortcut. A real acquirer
+  tokenises in the browser and the PAN never touches us — that is what keeps this out of
+  PCI-DSS scope. Phase 10 deletes the server-side path rather than reimplementing it.
+
+The prototype's "bonus până la 20% la alimentare" is **not** implemented. Nobody specified
+a bonus scheme, and inventing one in the UI would be inventing a business rule.
 
 ### 6 — Cart and checkout
 

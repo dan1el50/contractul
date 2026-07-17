@@ -13,6 +13,8 @@ import { AuthPage } from '@/features/auth/AuthPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
 import { CatalogPage } from '@/features/catalog/CatalogPage'
 import { TemplateDetailPage } from '@/features/catalog/TemplateDetailPage'
+import { AddCardPage } from '@/features/wallet/AddCardPage'
+import { WalletPage } from '@/features/wallet/WalletPage'
 
 export function Router() {
   return (
@@ -32,6 +34,22 @@ export function Router() {
           element={
             <RequireAuth>
               <TemplateDetailPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/portofel"
+          element={
+            <RequireAuth>
+              <WalletPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/portofel/card-nou"
+          element={
+            <RequireAuth>
+              <AddCardPage />
             </RequireAuth>
           }
         />
