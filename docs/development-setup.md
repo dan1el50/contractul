@@ -142,6 +142,26 @@ that container. Check `DATABASE_URL`.
 confirm the volume mount is present in `docker-compose.override.yml`. Frontend assets can
 also be cached — try a hard refresh before assuming the stack is at fault.
 
+**You added a dependency, the build succeeded, and the container still says
+`ModuleNotFoundError`.** Building an image does not restart anything. `docker compose up`
+will not recreate a running container it considers up to date, so the new image sits on
+disk unused while the old container keeps running. The volume mount actively hides this:
+`cat pyproject.toml` inside the container shows your edit, because that file comes from
+the mount — but the packages came from the image.
+
+```bash
+docker compose up -d --force-recreate backend
+```
+
+To confirm which image a container is actually running:
+
+```bash
+docker inspect contractul-backend-1 --format '{{.Image}}'
+docker images contractul-backend:latest --format '{{.ID}}'
+```
+
+Different values mean the container is stale.
+
 **`npm run build` succeeds but a rebuilt frontend still reports a missing package.** The
 frontend's `node_modules` lives in an anonymous volume, and Compose *reuses* that volume
 across `up` — so a rebuilt image's fresh `node_modules` stays hidden behind the old one.

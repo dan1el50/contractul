@@ -1,8 +1,15 @@
-"""Declarative base and model registry.
+"""Declarative base.
 
-Every model inherits from Base. Alembic's autogenerate reads Base.metadata to
-work out what the schema should look like, which means a model that is never
-imported is invisible to it — importing them here is what makes them visible.
+Base and nothing else. **This module must not import models.**
+
+Models import Base from here, so importing them back creates a cycle. Python
+tolerates that cycle in one import order and raises ImportError in the other,
+which means it can pass every test and still refuse to start the server —
+exactly what happened when this file did import them.
+
+Alembic still needs every model registered against Base.metadata before it
+inspects it. That job belongs to app.models.__init__, which alembic/env.py
+imports for the purpose.
 """
 
 from sqlalchemy import MetaData
@@ -27,9 +34,3 @@ NAMING_CONVENTION = {
 
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
-
-
-# Models are imported here so they register with Base.metadata before Alembic
-# inspects it. A model missing from this list is invisible to autogenerate,
-# which will cheerfully write a migration dropping its table.
-from app.models.user import User  # noqa: E402, F401

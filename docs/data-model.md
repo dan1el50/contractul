@@ -8,7 +8,8 @@ enforces.
 > constrains everything around it. Implementing it whole would mean building tables for
 > features that are not yet specified.
 >
-> Implemented so far: `users`. Everything else is the specification for its phase.
+> Implemented so far: `users`, `sessions`. Everything else is the specification for its
+> phase.
 
 ## Principles
 
@@ -100,6 +101,38 @@ enough provided it happens in exactly one place.
 **`is_admin` is a boolean, not a role table.** There are two kinds of people here:
 customers and Crowe staff. A roles-and-permissions system would be built for a requirement
 nobody has stated. It becomes a table the day a third kind appears.
+
+### `sessions` — implemented (phase 3)
+
+A signed-in session. **Missed when this schema was first designed** — phase 2 claimed to
+cover "the whole schema" and did not think about how anyone stays logged in. Added in
+phase 3, where the omission became obvious.
+
+| Column | Type | Notes |
+| --- | --- | --- |
+| `id` | UUID PK | |
+| `token_hash` | TEXT(64) UNIQUE NOT NULL | SHA-256 of the token. Never the token. |
+| `user_id` | UUID FK → users ON DELETE CASCADE | |
+| `expires_at` | TIMESTAMPTZ NOT NULL | 30 days from creation. |
+| `revoked_at` | TIMESTAMPTZ NULL | Set on logout. |
+| `created_at` | TIMESTAMPTZ NOT NULL | |
+
+Index: `(user_id, expires_at)` — every authenticated request filters on it.
+
+**Server-side sessions, not JWT.** The deciding factor is revocation. Deactivating an
+account or logging out must take effect immediately, and a stateless token stays valid
+until it expires no matter what the database says. The standard remedy — a revocation list
+— is this table with extra steps and worse ergonomics. The cost is one indexed lookup per
+authenticated request, which at this scale is nothing.
+
+**Tokens are hashed, exactly like passwords.** Someone who reads this table must not come
+away with a working login for every user currently signed in. Plain SHA-256 rather than
+Argon2, deliberately: Argon2 is slow to frustrate guessing a low-entropy human password,
+whereas a session token is 32 random bytes — already unguessable — and this is read on
+every request, so slowness would buy nothing and cost everything.
+
+**The only `ON DELETE CASCADE` in the schema.** A deleted user's sessions are meaningless.
+Everywhere else, history outlives its subject and deletes are soft.
 
 ### `companies` — phase 8
 
@@ -313,6 +346,7 @@ The constraints worth stating as intent rather than syntax:
 - A negative or zero template price — `CHECK (price_bani > 0)`. We do not give documents away.
 - The same document twice in one cart — `UNIQUE (cart_id, template_id)`.
 - Two accounts with one email — `UNIQUE (email)`, lowercase on write.
+- Two sessions sharing a token — `UNIQUE (token_hash)`.
 - Two versions numbered the same — `UNIQUE (template_id, version)`.
 - Two documents for one order line — `UNIQUE (order_item_id)`.
 - An order line pointing at no specific file — `template_version_id NOT NULL`.
