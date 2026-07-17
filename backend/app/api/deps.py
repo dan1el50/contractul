@@ -12,6 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.db.session import get_session
+from app.integrations.payments.base import PaymentProvider
+from app.integrations.payments.mock import MockPaymentProvider
 from app.integrations.storage.base import Storage
 from app.integrations.storage.local import LocalStorage
 from app.models.user import User
@@ -37,6 +39,25 @@ def get_storage() -> Storage:
 
 
 StorageDep = Annotated[Storage, Depends(get_storage)]
+
+
+@lru_cache
+def _payments() -> PaymentProvider:
+    """The one place a concrete PaymentProvider is named.
+
+    Everything else depends on the protocol, so swapping the mock for a real
+    acquirer changes this function and no business logic. Cached because the
+    mock keeps its charges in memory — a fresh instance per request would
+    forget every charge it had just taken, and refunds would fail.
+    """
+    return MockPaymentProvider()
+
+
+def get_payments() -> PaymentProvider:
+    return _payments()
+
+
+PaymentsDep = Annotated[PaymentProvider, Depends(get_payments)]
 
 
 async def get_session_token(

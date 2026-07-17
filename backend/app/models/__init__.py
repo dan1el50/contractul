@@ -14,12 +14,15 @@ import order and raises in the other passes tests while breaking the server.
 
 from app.models.catalog import Category, ContractTemplate, TemplateVersion
 from app.models.session import Session
+from app.models.wallet import PaymentCard, WalletTransaction
 from app.models.user import User
 
 __all__ = [
     "Category",
     "ContractTemplate",
+    "PaymentCard",
     "Session",
     "TemplateVersion",
     "User",
+    "WalletTransaction",
 ]
