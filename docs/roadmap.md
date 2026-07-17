@@ -42,27 +42,35 @@ out of the database.
 volume mounts — surfaces here, while there is nothing else to untangle it from. Every later
 phase fills in a shape already proven to hold.
 
-### 1 — Rendering spike
+### 1 — Rendering spike ✅ DONE
 
 **Branch:** `spike/document-rendering`
 
-Prove that a `.docx` can be filled and converted to PDF inside the backend container.
-Timeboxed. Throwaway code, no API, no polish.
+**Result: the approach works.** Proven against a real bilingual RO/RU document with
+embedded screenshots — layout, images, page count, every Romanian diacritic, and Cyrillic
+all survive conversion. LibreOffice adds ~4 minutes to the image build.
 
-- LibreOffice headless in the backend image
-- Fill one sample template with `docxtpl`, convert the result to PDF
-- **Verify Romanian diacritics (ă î ș ț â) and Cyrillic render correctly in both outputs**
-- Measure how long a conversion takes
+Delivered:
 
-**Done when:** we can state with evidence that the approach works, or that it does not.
+- `libreoffice-writer`, `poppler-utils`, and the DejaVu/Liberation fonts in the backend image
+- `app/documents/renderer.py` — fill with `docxtpl`, convert with headless LibreOffice,
+  rasterise previews with `pdftoppm`
+- `tests/integration/test_renderer.py` — reads text back out of the produced PDF and
+  asserts the characters survived
 
-**Why second:** this is the product. Everything else on this list is work we know how to
-do; this is the one dependency that could force an architecture change, and finding that
-out after building a catalog and a checkout would be expensive. The font handling in
-headless LibreOffice is the specific risk — Romanian diacritics and Cyrillic in the same
-document is exactly where it tends to break.
+Two findings worth carrying forward:
 
-A negative result here is a success for the phase. It is far cheaper now than in phase 7.
+- **Font substitution is silent.** A missing glyph becomes a box, the conversion reports
+  success, and nothing raises. The font packages in the Dockerfile are load-bearing, and
+  the tests assert on extracted PDF text rather than on the file existing — a test that
+  checks only for a PDF passes on exactly this failure.
+- **The fixture is not enough on its own.** It is typed without diacritics and has no
+  placeholders, so it proves neither. A synthetic template covers both. When the real
+  templates arrive, check what they actually contain before trusting a green suite.
+
+The spike went further than planned — it was promoted into real code rather than thrown
+away, and its output drives the prototype's document preview. Phase 7 wires it to orders
+and storage.
 
 ### 2 — Data model
 
@@ -96,7 +104,9 @@ codebase will copy.
 
 The first true vertical slice.
 
-- Template catalog endpoints, category filtering, language pricing
+- Template catalog endpoints, category filtering, flat per-document pricing
+- Real document previews, rendered on demand via the phase 1 renderer, replacing the
+  committed PNGs the prototype uses
 - `Landing`, `Catalog Sabloane`, `Detaliu Contract` screens
 - Design tokens extracted into `styles/tokens.css`
 - The app shell: sidebar and header
@@ -190,15 +200,17 @@ redirects, webhook timing, and currency handling are things a mock cannot teach 
 
 ## The dependency that is not code
 
-**The legal team must draft the `.docx` templates, in three languages.**
+**The legal team must draft the `.docx` templates.**
 
-Start this conversation in parallel with phase 0. Not phase 7.
+Each template is one file containing every language it is written in — Romanian and
+Russian side by side on the page, not three separate files.
 
-It sits on no branch's critical path and squarely on the critical path of shipping. We
-cannot sell a contract that does not exist, and "a lawyer finds time to draft twelve
-contracts in three languages" is measured in weeks and is entirely outside our control.
+Start this conversation now. It sits on no branch's critical path and squarely on the
+critical path of shipping. We cannot sell a contract that does not exist, and "a lawyer
+finds time to draft twelve multilingual contracts" is measured in weeks and is entirely
+outside our control.
 
-Phase 1 needs only one rough template to spike against. Phase 7 needs all of them. The
+Phase 1 is done and used a stand-in fixture. Phase 7 needs the real ones. The
 lead time starts when we ask, not when we are ready.
 
 ## What this plan assumes

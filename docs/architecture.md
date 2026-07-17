@@ -28,8 +28,11 @@ Four properties of the domain drive most of the decisions below.
   its template has been revised.
 - **Money is involved.** Wallet balances and payments need transactional integrity. This
   is the main reason for a relational database.
-- **Three languages.** Every template exists in Romanian, Russian, and English, and each
-  language is priced and sold separately.
+- **Multilingual documents, sold whole.** A document contains every language it is written
+  in, in one file — Romanian and Russian side by side on the page. It is one indivisible
+  product at one price; the buyer does not choose a language, because there is nothing to
+  choose. This makes rendering harder, not easier: two scripts must survive in the same
+  PDF, and a font covering only Latin silently destroys half of every document.
 - **Moldovan payments are awkward.** Local acquirers are the eventual target, so the
   payment integration is isolated behind an interface from day one.
 
@@ -114,8 +117,8 @@ opening transactions, the logic belongs in a service.
 
 The load-bearing flow of the product, and the one where correctness matters most.
 
-1. Customer selects a template and one or more languages. Each language is a separate
-   priced line item.
+1. Customer selects a template. One template is one priced line item — the languages it
+   contains are a property of the document, not a choice.
 2. Items go into a cart. The cart is **server-side state**, not browser state — a price
    the client can edit is not a price.
 3. At checkout the customer pays from their wallet balance or by card.
@@ -160,6 +163,21 @@ genuinely good.
 
 The cost is that LibreOffice is a heavy dependency in the image and PDF conversion is
 slow. That is an acceptable trade for content the legal team can own directly.
+
+**Verified.** The phase 1 spike proved this works, against a real bilingual RO/RU document
+with embedded screenshots: layout, images, page count, Romanian diacritics, and Cyrillic
+all survive conversion. LibreOffice adds roughly four minutes to the image build.
+
+The specific hazard, now guarded by tests: **font substitution is silent.** LibreOffice
+swaps a missing font for whatever it has, and a glyph it cannot render becomes a box or
+`U+FFFD` — the conversion reports success and the document is ruined. Two consequences
+that must not be undone:
+
+- The font packages in `backend/Dockerfile` are load-bearing, not incidental. DejaVu and
+  Liberation are there because they cover Latin Extended-A and Cyrillic.
+- `tests/integration/test_renderer.py` reads text back out of the produced PDF and asserts
+  the characters survived. A test that merely asserts a PDF exists would pass on exactly
+  the failure worth catching.
 
 Two rules protect the archive:
 

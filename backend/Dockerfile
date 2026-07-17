@@ -7,9 +7,28 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# LibreOffice is NOT installed here yet. It arrives in phase 1 (the rendering
-# spike) and will add several hundred megabytes and minutes to this build.
-# See docs/roadmap.md.
+# Document rendering toolchain.
+#
+#   libreoffice-writer  DOCX -> PDF. Writer only, not the whole suite — we have
+#                       no use for spreadsheets or slides and they are large.
+#   poppler-utils       pdftoppm, for rasterising PDF pages to preview images.
+#   fonts-*             The reason this list is explicit. The templates carry
+#                       Romanian diacritics (ă î ș ț â) and Cyrillic, and
+#                       LibreOffice substitutes fonts silently: a missing glyph
+#                       becomes a box in the PDF with no error anywhere. DejaVu
+#                       and Liberation both cover Latin Extended-A and Cyrillic,
+#                       and Liberation is metric-compatible with the Arial and
+#                       Times the templates are authored against.
+#
+# This is the expensive layer — a few hundred MB and several minutes. It is
+# placed before the dependency install so that editing pyproject.toml does not
+# reinstall LibreOffice.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libreoffice-writer \
+        poppler-utils \
+        fonts-dejavu \
+        fonts-liberation \
+    && rm -rf /var/lib/apt/lists/*
 
 # Dependencies first, in their own layer. The editable install needs the
 # package directory to exist, so app/ is copied before it — but only the

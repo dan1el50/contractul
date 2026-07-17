@@ -12,6 +12,11 @@ dependencies = [
     "alembic>=1.14",
     "pydantic>=2.9",
     "pydantic-settings>=2.6",
+    # Document rendering. docxtpl fills Jinja-style placeholders in a .docx
+    # while preserving Word formatting — the reason the legal team can own
+    # templates without a developer.
+    "docxtpl>=0.18",
+    "pypdf>=5.1",
 ]
 
 [project.optional-dependencies]

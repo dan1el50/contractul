@@ -84,15 +84,19 @@ backend/
 │           ├── base.py        The Storage protocol.
 │           └── local.py       Filesystem implementation.
 │
-├── contract_templates/        The .docx source templates, by language.
-│   ├── ro/
-│   ├── ru/
-│   └── en/
+├── contract_templates/        The .docx source templates. Flat — NOT split by
+│                              language: one file carries every language it is
+│                              written in. Uploaded by admins in phase 9.
+│
+├── scripts/                   Operational one-offs, run inside the container.
+│   └── render_preview.py      Regenerates the prototype's preview images.
 │
 └── tests/
     ├── conftest.py
+    ├── fixtures/              Sample documents. Test data, never catalog content.
     ├── unit/                  Services in isolation. No database, no network.
-    └── integration/           Through the API, against a real test database.
+    └── integration/           Through the API, and the document renderer, which
+                               needs real LibreOffice and so cannot be a unit test.
 ```
 
 ### Why `api/v1/`
@@ -103,7 +107,9 @@ Starting with `v1/` costs one directory and buys the ability to ship `v2` beside
 
 ### Why `contract_templates/` and not `templates/`
 
-`templates/` is the conventional name for a web framework's HTML templates. These are not
+`app/documents/` holds the code that renders; `backend/contract_templates/` holds the
+`.docx` files being rendered. `templates/` alone is the conventional name for a web
+framework's HTML templates. These are not
 that — they are the legal documents that constitute the product. The longer name prevents
 a genuinely confusing collision.
 
