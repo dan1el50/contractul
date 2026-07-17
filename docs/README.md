@@ -16,12 +16,13 @@ Documentation for **Contracte.md** — the self-service contract platform of Cro
 | [architecture.md](architecture.md) | What the system is, the services it is made of, how a request flows through them, and the reasoning behind the technology choices. Start here. |
 | [project-structure.md](project-structure.md) | The full folder layout of the monorepo, what belongs in each directory, and the rules that keep it from drifting. |
 | [development-setup.md](development-setup.md) | Getting the stack running locally with Docker Compose: prerequisites, first run, everyday commands, and troubleshooting. |
+| [roadmap.md](roadmap.md) | The order the system gets built in, one branch per phase, and the reasoning behind that order. |
 
 ## Reading order
 
 If you are new to the project, read them in the order above. `architecture.md` explains
-*why*, `project-structure.md` explains *where*, and `development-setup.md` explains *how to
-run it*.
+*why*, `project-structure.md` explains *where*, `development-setup.md` explains *how to run
+it*, and `roadmap.md` explains *what happens next*.
 
 ## Not covered yet
 
@@ -32,7 +33,6 @@ rather than guesses:
 - **API contract** — the REST endpoint specification. Until it is written, the
   auto-generated OpenAPI docs at `/docs` are the source of truth.
 - **Conventions and git workflow** — branching, commits, code style, testing strategy.
-- **Roadmap** — the phased build plan and the scope of each branch.
 
 ## Keeping these documents honest
 
