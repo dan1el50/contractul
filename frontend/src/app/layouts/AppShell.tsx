@@ -81,7 +81,7 @@ const NAV = [
 ]
 
 const ADMIN_NAV = {
-  to: '/admin',
+  to: '/contractul_admin',
   label: 'Administrare',
   icon: (
     <>
