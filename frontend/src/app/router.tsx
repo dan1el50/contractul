@@ -17,6 +17,7 @@ import { ConfirmationPage } from '@/features/cart/ConfirmationPage'
 import { CatalogPage } from '@/features/catalog/CatalogPage'
 import { TemplateDetailPage } from '@/features/catalog/TemplateDetailPage'
 import { LandingPage } from '@/features/marketing/LandingPage'
+import { SettingsPage } from '@/features/settings/SettingsPage'
 import { AddCardPage } from '@/features/wallet/AddCardPage'
 import { WalletPage } from '@/features/wallet/WalletPage'
 
@@ -57,6 +58,14 @@ export function Router() {
           element={
             <RequireAuth>
               <ConfirmationPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/setari"
+          element={
+            <RequireAuth>
+              <SettingsPage />
             </RequireAuth>
           }
         />

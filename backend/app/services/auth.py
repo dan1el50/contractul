@@ -162,3 +162,24 @@ async def revoke_session(session: AsyncSession, *, token: str) -> None:
     if record is not None and record.revoked_at is None:
         record.revoked_at = datetime.now(UTC)
         await session.flush()
+
+
+async def revoke_other_sessions(
+    session: AsyncSession, *, user_id, keep_token: str | None = None
+) -> None:
+    """Revoke every live session for a user except the one holding keep_token.
+
+    Used on a password change: whoever changed it keeps their seat, and anyone
+    else — including a thief working from a stolen cookie — is logged out at
+    once. That immediacy is the whole reason sessions are server-side.
+    """
+    keep_hash = hash_session_token(keep_token) if keep_token else None
+
+    records = await session.scalars(
+        select(Session).where(Session.user_id == user_id, Session.revoked_at.is_(None))
+    )
+    now = datetime.now(UTC)
+    for record in records.all():
+        if record.token_hash != keep_hash:
+            record.revoked_at = now
+    await session.flush()
