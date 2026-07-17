@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#011E41">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#011E41"/>
+    <rect x="440" y="250" width="320" height="360" rx="16" fill="#ffffff"/>
+    <rect x="480" y="300" width="240" height="14" rx="7" fill="#EDEFF3"/>
+    <rect x="480" y="340" width="200" height="10" rx="5" fill="#EDEFF3"/>
+    <rect x="480" y="366" width="230" height="10" rx="5" fill="#EDEFF3"/>
+    <rect x="480" y="392" width="150" height="10" rx="5" fill="#FFE8B0"/>
+    <circle cx="740" cy="590" r="34" fill="#F5A800"/>
+    <path d="M726 590 l10 10 l18 -20" stroke="#011E41" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</template>
+<x-dc>
+<helmet>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: #EEF1F5; color: #333333; -webkit-font-smoothing: antialiased; }
+  a { color: #0075C9; text-decoration: none; }
+  a:hover { color: #003F9F; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #D3D8E0; border-radius: 8px; border: 2px solid #EEF1F5; }
+  @media (max-width: 768px) {
+    .cr-shell > *:first-child { width: 0 !important; min-width: 0 !important; }
+    .cr-app-main { padding: 18px 15px 104px !important; }
+    .cr-hd { padding: 0 15px !important; }
+    .cr-grid2 { grid-template-columns: 1fr !important; }
+    .cr-stack { position: static !important; top: auto !important; }
+    .cr-hide-sm { display: none !important; }
+  }
+</style>
+</helmet>
+
+<div class="cr-shell" style="display:flex; min-height:100vh; width:100%;">
+  <dc-import name="Sidebar" active="panou" style="width:264px" hint-size="264px,100vh"></dc-import>
+
+  <div style="flex:1; display:flex; flex-direction:column; min-width:0;">
+    <header class="cr-hd" style="height:74px; background:#fff; border-bottom:1px solid #E6E9EE; display:flex; align-items:center; gap:14px; padding:0 32px; position:sticky; top:0; z-index:5;">
+      <a href="Catalog Sabloane.dc.html" style="width:38px; height:38px; border:1px solid #E0E3E9; border-radius:9px; display:flex; align-items:center; justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F4F4F" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#828282;">
+        <a href="Catalog Sabloane.dc.html" style="color:#828282;">Panou principal</a>
+        <span>/</span>
+        <span style="color:#4F4F4F;">Servicii</span>
+        <span>/</span>
+        <span style="color:#011E41; font-weight:600;">Prestări servicii</span>
+      </div>
+    </header>
+
+    <main class="cr-app-main" style="padding:32px; overflow-y:auto;">
+      <div class="cr-grid2" style="max-width:1000px; margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr; gap:30px; align-items:start;">
+
+        <!-- ===== LEFT: info ===== -->
+        <div style="display:flex; flex-direction:column; gap:24px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+              <div style="width:52px; height:52px; border-radius:13px; background:#FEF6E4; color:#B26A00; display:flex; align-items:center; justify-content:center;">
+                <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+              </div>
+              <span style="font-size:11.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#B26A00; background:#FEF6E4; padding:5px 11px; border-radius:20px;">Servicii</span>
+            </div>
+            <h1 style="font-size:28px; font-weight:700; color:#011E41; letter-spacing:-0.015em; line-height:1.2;">Contract de prestări servicii</h1>
+            <p style="font-size:15px; color:#4F4F4F; margin-top:12px; line-height:1.6;">Reglementează prestarea de servicii între un prestator și un beneficiar, cu obiect, termene, tarife și modalitate de plată. Redactat și actualizat de juriștii Crowe conform legislației Republicii Moldova.</p>
+          </div>
+
+          <!-- Included -->
+          <div style="background:#fff; border:1px solid #E6E9EE; border-radius:14px; padding:24px;">
+            <h2 style="font-size:15px; font-weight:700; color:#011E41; margin-bottom:16px;">Ce include</h2>
+            <div style="display:flex; flex-direction:column; gap:13px;">
+              <sc-for list="{{ included }}" as="i" hint-placeholder-count="4">
+                <div style="display:flex; gap:11px; align-items:center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0C7876" stroke-width="2.4" style="flex-shrink:0;"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span style="font-size:14px; color:#4F4F4F;">{{ i }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- Preview: page 1 visible, rest locked -->
+          <div style="background:#fff; border:1px solid #E6E9EE; border-radius:14px; padding:24px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+              <h2 style="font-size:15px; font-weight:700; color:#011E41;">Previzualizare document</h2>
+              <span style="font-size:12px; color:#9AA3B0;">Pagina 1 din {{ pageCount }}</span>
+            </div>
+
+            <!-- Page 1 — visible.
+                 These images are REAL OUTPUT: the .docx fixture rendered through
+                 the phase 1 pipeline (docxtpl -> LibreOffice -> PDF -> pdftoppm).
+                 Regenerate with backend/scripts/render_preview.py.
+                 The fixture is an internal 2FA guide, not a contract — it is here
+                 to exercise the layout, not to be read. -->
+            <div style="border:1px solid #EDEFF3; border-radius:10px; overflow:hidden; box-shadow:0 1px 2px rgba(1,30,65,0.04);">
+              <img src="assets/doc-preview/doc-1.png" alt="Pagina 1 a documentului" style="display:block; width:100%; height:auto;" />
+            </div>
+
+            <!-- Locked pages -->
+            <div style="position:relative; margin-top:14px; border-radius:10px; overflow:hidden; border:1px solid #EDEFF3;">
+              <div style="filter:blur(5px); user-select:none; pointer-events:none;">
+                <img src="assets/doc-preview/doc-2.png" alt="" style="display:block; width:100%; height:auto;" />
+              </div>
+              <!-- Lock overlay -->
+              <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.93)); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px;">
+                <div style="width:46px; height:46px; border-radius:50%; background:#011E41; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5A800" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <p style="font-size:14px; font-weight:700; color:#011E41;">Restul documentului este blocat</p>
+                <p style="font-size:12.5px; color:#828282; margin-top:5px; max-width:300px; line-height:1.5;">Cumpără contractul pentru a debloca toate cele {{ pageCount }} pagini, în PDF și Word editabil.</p>
+                <a href="Cos.dc.html" style="margin-top:14px; height:40px; padding:0 20px; background:#F5A800; color:#011E41; font-size:13.5px; font-weight:700; border-radius:9px; display:inline-flex; align-items:center; gap:8px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#011E41" stroke-width="2.1"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Deblochează prin cumpărare
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== RIGHT: buy panel ===== -->
+        <div class="cr-stack" style="background:#fff; border:1px solid #E6E9EE; border-radius:16px; padding:28px; position:sticky; top:32px;">
+          <p style="font-size:12.5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#828282;">Preț</p>
+          <p style="font-size:34px; font-weight:700; color:#011E41; margin-top:6px; letter-spacing:-0.02em;">{{ price }} <span style="font-size:17px; font-weight:600; color:#9AA3B0;">MDL</span></p>
+          <p style="font-size:13px; color:#828282; margin-top:5px;">Preț unic, indiferent de limbă</p>
+
+          <!-- Languages included. Replaces the selector below: a document is one
+               file containing every language it is written in, so there is
+               nothing for the buyer to choose. -->
+          <div style="margin-top:22px; padding:14px 16px; background:#F7F9FC; border-radius:11px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0C7876" stroke-width="1.9" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <div>
+                <p style="font-size:13px; color:#4F4F4F;">Limbi incluse: <strong style="color:#011E41;">{{ includedLangs }}</strong></p>
+                <p style="font-size:11.5px; color:#9AA3B0; margin-top:2px;">Toate limbile sunt în același document</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════════════════════════════════════════════════════════
+               LANGUAGE SELECTOR — DISABLED, NOT DELETED (2026-07-17)
+
+               Kept because the per-language model may return. Each document now
+               ships as ONE file containing every language it is written in, so
+               there is nothing to select and nothing to multiply the price by.
+
+               TO RESTORE:
+                 1. Delete the "Limbi incluse" block above.
+                 2. Uncomment this block.
+                 3. Restore the price line to:
+                      <p ...>{{ unit }} MDL × {{ count }} {{ langWord }}</p>
+                 4. Uncomment the "Limbi selectate" line further down.
+                 5. Uncomment the language block in the script at the bottom.
+               ══════════════════════════════════════════════════════════════════
+          <div style="margin-top:26px;">
+            <label style="font-size:13px; font-weight:600; color:#4F4F4F; margin-bottom:10px; display:block;">Limbile documentului <span style="font-weight:400; color:#9AA3B0;">(poți alege mai multe)</span></label>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+              <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+                <button onClick="{{ l.onClick }}" style="{{ l.style }}">
+                  <span style="{{ l.checkStyle }}">✓</span>
+                  <span style="font-size:14px; font-weight:700;">{{ l.code }}</span>
+                  <span style="font-size:11px; margin-top:2px; opacity:0.75;">{{ l.name }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          ══════════════════════════════════════════════════════════════════ -->
+
+          <!-- Format -->
+          <div style="display:flex; align-items:center; gap:10px; margin-top:22px; padding:14px 16px; background:#F7F9FC; border-radius:11px;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#003F9F" stroke-width="1.9" style="flex-shrink:0;"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+            <p style="font-size:13px; color:#4F4F4F;">Primești în <strong style="color:#011E41;">PDF + Word editabil</strong></p>
+          </div>
+
+          <!-- Add to cart -->
+          <a href="Cos.dc.html" style="margin-top:22px; width:100%; height:52px; background:#F5A800; color:#011E41; font-size:15px; font-weight:700; border:none; border-radius:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#011E41" stroke-width="2.1"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L22 7H6"/></svg>
+            Adaugă în coș
+          </a>
+          <!-- Restore with the language selector:
+          <p style="font-size:12px; color:#9AA3B0; text-align:center; margin-top:12px;">Limbi selectate: <strong style="color:#4F4F4F;">{{ selectedLabel }}</strong></p>
+          -->
+
+          <div style="height:1px; background:#F1F3F6; margin:22px 0;"></div>
+          <div style="display:flex; align-items:center; gap:9px; font-size:12.5px; color:#0C7876; font-weight:600;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0C7876" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Verificat juridic de Crowe
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{ &quot;$preview&quot;: { &quot;width&quot;: 1440, &quot;height&quot;: 940 } }">
+class Component extends DCLogic {
+  // ════════════════════════════════════════════════════════════════════════
+  // LANGUAGE SELECTION — DISABLED, NOT DELETED (2026-07-17)
+  //
+  // A document is now ONE file containing every language it is written in, so
+  // the buyer has nothing to choose and the price is flat. The per-language
+  // logic is preserved verbatim below in case that model returns.
+  //
+  // TO RESTORE: uncomment this block and the two markup blocks above, and
+  // return { unit, count, langWord, price: fmt(UNIT * count), langs,
+  // selectedLabel } from renderVals instead of the flat price.
+  //
+  // state = { sel: { ro: true, ru: false, en: false } };
+  // toggle(k) {
+  //   return () => this.setState((s) => {
+  //     const next = { ...s.sel, [k]: !s.sel[k] };
+  //     if (!next.ro && !next.ru && !next.en) return {};
+  //     return { sel: next };
+  //   });
+  // }
+  //
+  // ...and inside renderVals():
+  //
+  // const sel = this.state.sel;
+  // const defs = [ { k: 'ro', code: 'RO', name: 'Română' }, { k: 'ru', code: 'RU', name: 'Русский' }, { k: 'en', code: 'EN', name: 'English' } ];
+  // const base = { position: 'relative', height: '58px', borderRadius: '11px', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1.5px solid #E0E3E9', background: '#fff', color: '#4F4F4F' };
+  // const on = { border: '1.5px solid #011E41', background: '#F7F9FC', color: '#011E41' };
+  // const check = (active) => ({ position: 'absolute', top: '6px', right: '6px', width: '17px', height: '17px', borderRadius: '50%', background: '#011E41', color: '#fff', display: active ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700 });
+  // const langs = defs.map((d) => ({ code: d.code, name: d.name, style: sel[d.k] ? { ...base, ...on } : base, checkStyle: check(sel[d.k]), onClick: this.toggle(d.k) }));
+  // const chosen = defs.filter((d) => sel[d.k]);
+  // const count = chosen.length;
+  // ════════════════════════════════════════════════════════════════════════
+
+  renderVals() {
+    // One document, one price — regardless of how many languages it contains.
+    const PRICE = 900;
+    const fmt = (n) => n.toLocaleString('ru-RU').replace(/,/g, ' ');
+
+    return {
+      price: fmt(PRICE),
+
+      // Which languages this particular document is written in. Descriptive,
+      // not selectable — it comes from the document itself. Once the admin
+      // panel exists (phase 9) this is metadata the admin sets per template.
+      includedLangs: 'RO, RU',
+
+      // Page count of the rendered document. Hardcoded here because the
+      // prototype has no backend; the real screen reads it from the PDF.
+      pageCount: 2,
+
+      included: [
+        'Document conform legislației RM',
+        'Toate limbile în același fișier',
+        'Formate PDF și Word editabil',
+        'Câmpuri completate automat din datele tale',
+        'Actualizări gratuite la modificări legislative'
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
