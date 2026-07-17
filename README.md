@@ -49,5 +49,3 @@ Until then, see [development setup](docs/development-setup.md) for the plan.
 ## How we work
 
 Each part of the project is built on its own branch and merged into `main` when complete.
-</content>
-</invoke>

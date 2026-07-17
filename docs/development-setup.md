@@ -142,6 +142,18 @@ that container. Check `DATABASE_URL`.
 confirm the volume mount is present in `docker-compose.override.yml`. Frontend assets can
 also be cached — try a hard refresh before assuming the stack is at fault.
 
+**`npm run build` succeeds but a rebuilt frontend still reports a missing package.** The
+frontend's `node_modules` lives in an anonymous volume, and Compose *reuses* that volume
+across `up` — so a rebuilt image's fresh `node_modules` stays hidden behind the old one.
+Rebuilding does not fix it; the volume outlives the image. Renew it explicitly:
+
+```bash
+docker compose up -d --force-recreate --renew-anon-volumes frontend
+```
+
+This is the single most confusing failure in the setup, because every instinct says
+rebuild and rebuilding is exactly what does not work.
+
 **PDF conversion fails or hangs.** LibreOffice runs headless inside the backend container
 and is the most fragile part of the stack. Check `docker compose logs backend`. If the
 container was built before LibreOffice was added to the Dockerfile, rebuild without cache:
@@ -154,5 +166,3 @@ configuration, which is a real bug worth reporting rather than working around.
 **Slow on Windows or macOS.** File-system sync across the container boundary is the usual
 cause. On Windows, keep the repository inside the WSL 2 filesystem rather than under
 `/mnt/c` — the difference is large.
-</content>
-</invoke>
