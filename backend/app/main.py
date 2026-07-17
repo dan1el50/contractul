@@ -20,8 +20,8 @@ logging.basicConfig(
 settings = get_settings()
 
 app = FastAPI(
-    title="Contracte.md API",
-    description="Self-service legal contracts — Crowe Turcan Mikhailenko",
+    title="Contractul.md API",
+    description="Self-service legal contracts",
     version="0.1.0",
     docs_url="/docs",
     redoc_url=None,

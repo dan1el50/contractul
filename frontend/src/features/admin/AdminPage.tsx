@@ -106,7 +106,7 @@ export function AdminPage() {
     : []
 
   return (
-    <AppShell title="Panou de administrare" subtitle="Crowe Turcan Mikhailenko">
+    <AppShell title="Panou de administrare" subtitle="Administrare internă">
       {error && (
         <p className={styles.error} role="alert">
           {error}

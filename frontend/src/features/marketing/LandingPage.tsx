@@ -108,7 +108,7 @@ export function LandingPage() {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber)" strokeWidth="2.2" aria-hidden="true">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
-              <span>Verificate juridic de Crowe Turcan Mikhailenko</span>
+              <span>Verificate juridic, conforme legislației Republicii Moldova</span>
             </div>
             <h1 className={styles.heroTitle}>
               Contracte gata de semnat,
@@ -177,7 +177,7 @@ export function LandingPage() {
           <p className={styles.eyebrow}>Magazin de contracte</p>
           <h2 className={styles.sectionTitle}>Alege categoria de care ai nevoie</h2>
           <p className={styles.sectionSub}>
-            Fiecare contract este redactat și actualizat de juriștii Crowe.
+            Fiecare contract este redactat și actualizat de juriști.
           </p>
         </div>
 

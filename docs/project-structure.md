@@ -222,7 +222,7 @@ Still present, because it is still the only specification for the one screen not
 When that ships, all of `assets/`, `support.js`, and the last prototype go with it.
 
 `support.js` and `assets/image-slot.js` stay while any prototype does — they are its
-runtime. `assets/smartpath-*.png` are Crowe brand textures: they were **copied** into
+runtime. `assets/smartpath-*.png` are brand textures: they were **copied** into
 `frontend/src/assets/` when Landing shipped, and the originals stay in `assets/` while the
 remaining prototypes reference them. All of `assets/` goes when the last screen ships.
 

@@ -18,6 +18,7 @@ import { CartPage } from '@/features/cart/CartPage'
 import { ConfirmationPage } from '@/features/cart/ConfirmationPage'
 import { CatalogPage } from '@/features/catalog/CatalogPage'
 import { TemplateDetailPage } from '@/features/catalog/TemplateDetailPage'
+import { DocumentsPage } from '@/features/documents/DocumentsPage'
 import { LandingPage } from '@/features/marketing/LandingPage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
 import { AddCardPage } from '@/features/wallet/AddCardPage'
@@ -44,6 +45,14 @@ export function Router() {
           element={
             <RequireAuth>
               <AddCardPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/documentele-mele"
+          element={
+            <RequireAuth>
+              <DocumentsPage />
             </RequireAuth>
           }
         />

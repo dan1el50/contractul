@@ -1,6 +1,6 @@
 # Roadmap
 
-The order in which Contracte.md gets built, and why that order.
+The order in which Contractul.md gets built, and why that order.
 
 Each phase is one branch, merged into `main` when complete. A phase is done when it works
 end to end — not when the code is written.
@@ -313,7 +313,7 @@ Delivered:
   copied into `frontend/src/assets/` when Landing shipped; the rest of `assets/` goes when
   phase 7 ships.
 
-**Why here:** it is internal. Nobody outside Crowe is blocked on it.
+**Why here:** it is internal. Nobody outside the company is blocked on it.
 
 ### 10 — Real payments
 

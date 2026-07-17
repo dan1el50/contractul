@@ -1,4 +1,4 @@
-"""Admin endpoints. Behind the admin guard — Crowe staff only.
+"""Admin endpoints. Behind the admin guard — staff only.
 
 AdminUser returns 403 for a signed-in non-admin and 401 for a stranger, so none
 of these handlers repeat the check.
