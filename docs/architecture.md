@@ -219,6 +219,26 @@ already broken.
 Same pattern. A `Storage` interface with `save`, `open`, and `delete`; a local-filesystem
 implementation now, an S3 implementation when we deploy somewhere that warrants it.
 
+### Rate limiting
+
+Same pattern again. A `RateLimiter` interface with a single `hit(key, limit, window)`; an
+in-memory sliding-window implementation now, a shared-store (Redis) implementation the day
+a second backend worker exists.
+
+The auth endpoints are behind it: **login** (against password brute force) and **register**
+(against the email-enumeration oracle its 409 necessarily is, and against signup spam),
+each keyed by client IP with its own budget. A tripped limit is a `429` with a `Retry-After`
+header. Limits are settings, not constants, so they tune without a redeploy.
+
+The honest limitation, stated where it will be found rather than discovered in an incident:
+**the counter lives in one process's memory.** With a single worker it is authoritative;
+with N workers each keeps its own count and the effective limit becomes N×. That is the
+whole reason the interface exists before we strictly need it — the fix is a shared backend
+behind this same `RateLimiter`, and nothing above `core/rate_limit.py` changes when it
+lands. The client IP comes from the socket peer, never from `X-Forwarded-For`, until a
+trusted proxy is configured (`TRUST_FORWARDED_FOR`) — otherwise the header is forgeable and
+the limit is free to dodge.
+
 ## Design system
 
 The visual language is settled and comes from the Crowe brand, already applied across the

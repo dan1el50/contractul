@@ -113,6 +113,26 @@ async def client(session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     app.dependency_overrides.clear()
 
 
+@pytest.fixture(autouse=True)
+def _reset_rate_limiter() -> None:
+    """Empty the rate limiter before every test.
+
+    The limiter is a process-wide singleton keyed by client IP, and every
+    ASGITransport request arrives from the same address. Without this, attempts
+    would pile up across unrelated tests until an innocent register or login
+    tripped the limit — a suite that fails by execution order, which is exactly
+    what the rolled-back session fixture works to prevent for the database.
+    """
+    from app.api.deps import get_rate_limiter
+    from app.core.rate_limit import InMemoryRateLimiter
+
+    limiter = get_rate_limiter()
+    # reset() is an implementation detail, not part of the Protocol — narrow to
+    # the concrete type rather than widen the interface for a test's benefit.
+    assert isinstance(limiter, InMemoryRateLimiter)
+    limiter.reset()
+
+
 @pytest.fixture
 def anyio_backend() -> str:
     return "asyncio"
