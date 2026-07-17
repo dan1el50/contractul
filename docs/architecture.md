@@ -252,5 +252,3 @@ once the frontend implements them — see
 - **Documents are legal instruments.** Sold documents are immutable and permanently
   retrievable.
 - **The frontend is not a security boundary.** Every rule is enforced server-side.
-</content>
-</invoke>

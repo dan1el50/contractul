@@ -228,5 +228,3 @@ environment — everything else takes settings as arguments, which is what makes
 
 **Migrations are append-only.** Once a migration is merged, it is never edited. Correcting
 it means writing another one. Someone else's database has already run it.
-</content>
-</invoke>

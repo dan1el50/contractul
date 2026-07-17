@@ -154,5 +154,3 @@ configuration, which is a real bug worth reporting rather than working around.
 **Slow on Windows or macOS.** File-system sync across the container boundary is the usual
 cause. On Windows, keep the repository inside the WSL 2 filesystem rather than under
 `/mnt/c` — the difference is large.
-</content>
-</invoke>

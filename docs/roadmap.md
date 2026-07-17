@@ -211,5 +211,3 @@ two it is coordination.
 **Phases can be resequenced; phase 0 and phase 1 cannot.** Everything from phase 3 onward
 is negotiable if priorities shift. The skeleton and the spike are not, because they exist
 to remove uncertainty that everything else assumes away.
-</content>
-</invoke>

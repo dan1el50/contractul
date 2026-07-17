@@ -42,5 +42,3 @@ Documentation that lies is worse than no documentation. Two rules:
    change. Not in a follow-up.
 2. Do not document what the code already states plainly. These files explain decisions,
    boundaries, and reasoning — the things you cannot recover by reading the source.
-</content>
-</invoke>
