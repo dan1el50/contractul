@@ -14,11 +14,14 @@ from collections.abc import AsyncGenerator
 
 import pytest
 import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import get_settings
 from app.db.base import Base
+from app.db.session import get_session
+from app.main import app
 
 TEST_DATABASE_NAME = "contractul_test"
 
@@ -83,6 +86,31 @@ async def session(engine: AsyncEngine) -> AsyncGenerator[AsyncSession, None]:
         # is how people learn to ignore warnings.
         if transaction.is_active:
             await transaction.rollback()
+
+
+@pytest_asyncio.fixture(loop_scope="session")
+async def client(session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
+    """An HTTP client wired to the same rolled-back session as the test.
+
+    The override is what makes this work: without it the app would open its own
+    connection, the test's writes would be invisible to the request, and the
+    request's writes would survive the test. Sharing the session means the whole
+    request/response cycle lands inside the transaction that gets discarded.
+
+    ASGITransport calls the app in-process — no port, no network, no server to
+    start. Middleware, dependencies and routing all still run.
+    """
+
+    async def _use_test_session() -> AsyncGenerator[AsyncSession, None]:
+        yield session
+
+    app.dependency_overrides[get_session] = _use_test_session
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as http_client:
+        yield http_client
+
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture

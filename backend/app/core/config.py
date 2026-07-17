@@ -29,6 +29,14 @@ class Settings(BaseSettings):
 
     document_storage_path: str = "/var/lib/contractul/documents"
 
+    session_cookie_name: str = "contractul_session"
+
+    # Secure cookies are HTTPS-only, so this must be false for local http://
+    # development and true everywhere else. It is a setting rather than derived
+    # from `environment` so that a staging box on HTTPS can have it on without
+    # pretending to be production.
+    cookie_secure: bool = False
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]

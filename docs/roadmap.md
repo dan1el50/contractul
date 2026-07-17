@@ -92,18 +92,38 @@ Three open questions are recorded at the bottom of the data model rather than gu
 **VAT** (needed before phase 6), **order numbering** (gap-free numbering is far harder
 than it looks), and **refunds** (nobody has specified who may issue one).
 
-### 3 — Authentication
+### 3 — Authentication ✅ DONE
 
 **Branch:** `feat/auth`
 
-Registration, login, sessions, the current-user dependency, and the `Autentificare` screen.
+Registration, login, logout, sessions, the current-user dependency, and the
+`Autentificare` screen. Verified in a real browser: register, reload, log out, and be
+refused on the way back in.
 
-**Done when:** you can register, log in, and see your own name in the app shell.
+**Retires:** `Autentificare.dc.html`
 
-**Why here:** every phase downstream needs to know who the user is. It is also
-well-understood work, which makes it the right place to establish the patterns — how a
-service is shaped, how a route stays thin, how tests are written — that the rest of the
-codebase will copy.
+Delivered:
+
+- `sessions` table — server-side, not JWT, because revocation has to be immediate
+- Argon2id hashing; session tokens SHA-256'd before storage
+- httpOnly + SameSite=Lax cookie. The browser check confirms `document.cookie` is empty
+  while the session works — JavaScript cannot reach it, so XSS cannot steal it.
+- One indistinguishable failure for unknown email / wrong password / deactivated account,
+  including matching timing
+- React Router, an auth context, a `RequireAuth` gate, and the real login screen
+
+The patterns the rest of the codebase copies are set here: services know nothing about
+HTTP, routes are three lines, schemas list their fields explicitly so a model column can
+never leak into a response by accident.
+
+Two things this phase turned up, both recorded where they happened:
+
+- **The phase 2 schema forgot sessions**, despite claiming to be complete. Designing a
+  schema "whole" is not the same as designing it correctly.
+- **A circular import meant the server would not start, and 83 tests passed anyway.**
+  Import order in `conftest.py` differed from uvicorn's. `tests/unit/test_app_imports.py`
+  now imports `app.main` in a fresh subprocess, and was verified to fail against the
+  original bug — a guard nobody has watched fail is not a guard.
 
 ### 4 — Catalog
 

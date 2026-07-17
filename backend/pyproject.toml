@@ -17,6 +17,12 @@ dependencies = [
     # templates without a developer.
     "docxtpl>=0.18",
     "pypdf>=5.1",
+    # Password hashing. Argon2id is the current recommendation (OWASP, and the
+    # Password Hashing Competition winner) — memory-hard, so a GPU farm gains
+    # far less against it than against bcrypt or PBKDF2.
+    "argon2-cffi>=23.1",
+    # EmailStr validation.
+    "email-validator>=2.2",
 ]
 
 [project.optional-dependencies]

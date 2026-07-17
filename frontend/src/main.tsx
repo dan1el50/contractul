@@ -1,7 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { SystemStatus } from '@/features/health/SystemStatus'
+import { Router } from '@/app/router'
+import { AuthProvider } from '@/features/auth/AuthContext'
 import '@/styles/global.css'
 
 const container = document.getElementById('root')
@@ -9,6 +10,8 @@ if (!container) throw new Error('Root element #root not found in index.html')
 
 createRoot(container).render(
   <StrictMode>
-    <SystemStatus />
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
   </StrictMode>,
 )
