@@ -8,7 +8,7 @@
  */
 
 import type { ReactNode } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 import { useAuth } from '@/features/auth/AuthContext'
 
@@ -25,8 +25,8 @@ function initials(fullName: string): string {
 
 const NAV = [
   {
-    to: '/',
-    label: 'Panou principal',
+    to: '/catalog',
+    label: 'Catalog',
     icon: (
       <>
         <rect x="3" y="3" width="7" height="7" rx="1.5" />
@@ -93,19 +93,19 @@ export function AppShell({ title, subtitle, children, headerRight }: Props) {
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <div className={styles.brand}>
+        <Link to="/" className={styles.brand}>
           <p className={styles.brandMark}>CONTRACTE.MD</p>
           <p className={styles.brandSub}>Crowe Turcan Mikhailenko</p>
-        </div>
+        </Link>
 
         <nav className={styles.nav}>
           {NAV.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
-              // `end` on the root link only. Without it "/" matches every
-              // route and every nav item lights up at once.
-              end={item.to === '/'}
+              // `end` on the catalog link, whose path is a prefix of
+              // /contract and friends — without it, it would stay lit on those.
+              end={item.to === '/catalog'}
               className={({ isActive }) => (isActive ? styles.navItemOn : styles.navItem)}
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">

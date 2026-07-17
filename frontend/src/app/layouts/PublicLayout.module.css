@@ -1,0 +1,166 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+}
+
+/* ─── Nav ─────────────────────────────────────────────────────────────── */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 72px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brandMark {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-navy);
+}
+
+.brandSub {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.links {
+  display: flex;
+  gap: 26px;
+  margin-right: auto;
+  margin-left: 36px;
+}
+
+.link {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4f4f4f;
+}
+
+.link:hover {
+  color: var(--color-navy);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.signIn {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.cta {
+  height: 42px;
+  padding: 0 20px;
+  background: var(--color-amber);
+  color: var(--color-navy);
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-control);
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────────── */
+
+.footer {
+  margin-top: auto;
+  background: var(--color-navy);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footerGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 52px 28px 40px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 32px;
+}
+
+.footBrand {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.footText {
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.footHead {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 14px;
+}
+
+.footLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13.5px;
+}
+
+.footLink {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footLink:hover {
+  color: #fff;
+}
+
+.footMeta {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footBar {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footBarInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 28px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .links {
+    display: none;
+  }
+
+  .footerGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

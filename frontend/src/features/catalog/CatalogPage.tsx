@@ -1,14 +1,16 @@
 /**
- * Panou principal — the contract catalog.
+ * The contract catalog — the shop.
  *
- * Implements Catalog Sabloane.dc.html.
- * Retires Catalog Sabloane.dc.html.
+ * Public: browsable signed in or out. BrowseLayout gives it the sidebar when
+ * signed in and the marketing chrome when not.
+ *
+ * Implements Catalog Sabloane.dc.html. Retires Catalog Sabloane.dc.html.
  */
 
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
-import { AppShell } from '@/app/layouts/AppShell'
+import { BrowseLayout } from '@/app/layouts/BrowseLayout'
 import { ApiError } from '@/lib/api-client'
 
 import { fetchCategories, fetchTemplates, type Category, type TemplateSummary } from './api'
@@ -64,8 +66,8 @@ export function CatalogPage() {
   }
 
   return (
-    <AppShell
-      title="Panou principal"
+    <BrowseLayout
+      title="Catalog de contracte"
       subtitle="Contracte verificate juridic de Crowe Turcan Mikhailenko"
     >
       <div className={styles.chips}>
@@ -134,6 +136,6 @@ export function CatalogPage() {
           </Link>
         ))}
       </div>
-    </AppShell>
+    </BrowseLayout>
   )
 }
