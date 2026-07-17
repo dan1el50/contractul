@@ -1,7 +1,7 @@
 [project]
 name = "contractul-backend"
 version = "0.1.0"
-description = "Contracte.md API — Crowe Turcan Mikhailenko"
+description = "Contractul.md API"
 requires-python = ">=3.12"
 
 dependencies = [
@@ -23,6 +23,9 @@ dependencies = [
     "argon2-cffi>=23.1",
     # EmailStr validation.
     "email-validator>=2.2",
+    # Parses multipart/form-data, which FastAPI needs for file uploads — the
+    # admin uploads a .docx when adding a template.
+    "python-multipart>=0.0.12",
 ]
 
 [project.optional-dependencies]
@@ -54,6 +57,12 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's File()/Form() as argument defaults is the framework's intended
+# usage, not the mutable-default trap B008 guards against. Query/Path/Depends
+# are already on ruff's built-in allowlist; these two are not.
+extend-immutable-calls = ["fastapi.File", "fastapi.Form"]
 
 [tool.mypy]
 python_version = "3.12"

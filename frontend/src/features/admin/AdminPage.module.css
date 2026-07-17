@@ -213,6 +213,194 @@
   margin-bottom: 16px;
 }
 
+/* Template management */
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.addButton {
+  height: 38px;
+  padding: 0 15px;
+  border: 1px solid var(--color-navy);
+  background: var(--color-navy);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.deleteButton {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #e0e3e9;
+  background: #fff;
+  color: #b0b7c2;
+  border-radius: 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteButton:hover {
+  color: var(--color-danger);
+  border-color: #f5c6c6;
+  background: #fdf2f2;
+}
+
+.form {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 22px;
+  background: #fbfcfe;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formLabel {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #4f4f4f;
+}
+
+.formInput,
+.formTextarea,
+.formFile {
+  border: 1.5px solid #e0e3e9;
+  border-radius: var(--radius-control);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.formInput {
+  height: 42px;
+  padding: 0 13px;
+}
+
+.formTextarea {
+  padding: 10px 13px;
+  resize: vertical;
+}
+
+.formFile {
+  padding: 9px 12px;
+  font-size: 13px;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+  outline: none;
+  border-color: var(--color-blue);
+}
+
+.formRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.langGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.langChips {
+  display: flex;
+  gap: 8px;
+}
+
+.langOn,
+.langOff {
+  width: 44px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  border: 1.5px solid #e0e3e9;
+}
+
+.langOn {
+  background: var(--color-navy);
+  color: #fff;
+  border-color: var(--color-navy);
+}
+
+.langOff {
+  background: #fff;
+  color: var(--color-text-muted);
+}
+
+.publishToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #4f4f4f;
+  cursor: pointer;
+}
+
+.formSubmit {
+  align-self: flex-start;
+  height: 44px;
+  padding: 0 22px;
+  background: var(--color-amber);
+  color: var(--color-navy);
+  border: none;
+  border-radius: var(--radius-control);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.formSubmit:disabled {
+  background: #e9ecf1;
+  color: var(--color-text-subtle);
+  cursor: not-allowed;
+}
+
+.formError {
+  padding: var(--space-3);
+  background: #fdf2f2;
+  border: 1px solid #f5c6c6;
+  border-radius: var(--radius-control);
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 860px) {
   .kpis {
     grid-template-columns: repeat(2, 1fr);

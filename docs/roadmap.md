@@ -295,13 +295,21 @@ figures, and unpublishing a template hides it from the public catalog.
 
 Delivered:
 
-- Admin aggregates (`/admin/stats`, `/admin/revenue`, `/admin/orders`) and template
-  management (`/admin/templates`, publish/unpublish), all behind `AdminUser` — 403 for a
-  signed-in customer, 401 for a stranger
+- Admin aggregates (`/admin/stats`, `/admin/revenue`, `/admin/orders`) and full template
+  management (`/admin/templates` — list, **add by uploading a .docx, remove**, and
+  publish/unpublish), all behind `AdminUser` — 403 for a signed-in customer, 401 for a
+  stranger
+- Adding a template stores the uploaded `.docx` and renders it once to count pages, which
+  doubles as validation: a file that is not a real, convertible document is refused rather
+  than becoming a broken catalog entry. Removal is refused for a template with sales (it
+  would orphan a receipt) — that one is hidden instead
 - The revenue series fills empty months to zero, so the chart has a continuous axis
 - `Dashboard Admin` with KPI cards, an inline-SVG revenue chart (no chart library — the
-  page stays self-contained), a recent-orders table, and a template list with a publish
-  toggle. The admin sidebar link and the `/admin` route appear only for admins
+  page stays self-contained), a recent-orders table, and a template list with an add form,
+  a publish toggle, and a delete button
+- **Admins get a management-focused sidebar.** They own every contract, so the cart,
+  wallet, and "my documents" links are dropped for them; the dashboard leads instead. The
+  admin link and the `/contractul_admin` route appear only for admins
 
 **Two adaptations, both honest:**
 

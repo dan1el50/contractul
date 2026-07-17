@@ -9,11 +9,15 @@
  * self-contained.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 
 import { AppShell } from '@/app/layouts/AppShell'
+import { ApiError } from '@/lib/api-client'
 
 import {
+  createTemplate,
+  deleteTemplate,
+  fetchCategories,
   fetchOrders,
   fetchRevenue,
   fetchStats,
@@ -22,9 +26,16 @@ import {
   type AdminOrder,
   type AdminStats,
   type AdminTemplate,
+  type Category,
   type MonthRevenue,
 } from './api'
 import styles from './AdminPage.module.css'
+
+const LANGUAGES = [
+  { code: 'ro', label: 'RO' },
+  { code: 'ru', label: 'RU' },
+  { code: 'en', label: 'EN' },
+]
 
 const MONTHS_RO = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Noi', 'Dec']
 
@@ -64,22 +75,178 @@ function RevenueChart({ data }: { data: MonthRevenue[] }) {
   )
 }
 
+function AddTemplateForm({
+  categories,
+  onCreated,
+}: {
+  categories: Category[]
+  onCreated: (t: AdminTemplate) => void
+}) {
+  const [name, setName] = useState('')
+  const [categoryId, setCategoryId] = useState('')
+  const [description, setDescription] = useState('')
+  const [priceMdl, setPriceMdl] = useState('')
+  const [languages, setLanguages] = useState<string[]>(['ro'])
+  const [isPublished, setIsPublished] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  function toggleLang(code: string) {
+    setLanguages((cur) => (cur.includes(code) ? cur.filter((c) => c !== code) : [...cur, code]))
+  }
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault()
+    setError(null)
+
+    if (!file) return setError('Încarcă un fișier .docx.')
+    if (!categoryId) return setError('Alege o categorie.')
+    if (languages.length === 0) return setError('Alege cel puțin o limbă.')
+    // Admin enters MDL; the API stores bani. Integer multiply, no float drift.
+    const priceBani = Math.round(Number(priceMdl) * 100)
+    if (!Number.isFinite(priceBani) || priceBani <= 0) return setError('Preț invalid.')
+
+    setBusy(true)
+    try {
+      const created = await createTemplate({
+        name,
+        categoryId,
+        description,
+        priceBani,
+        languages,
+        isPublished,
+        file,
+      })
+      onCreated(created)
+    } catch (caught) {
+      setError(caught instanceof ApiError ? caught.message : 'Nu am putut adăuga șablonul.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.formGrid}>
+        <label className={styles.formField}>
+          <span className={styles.formLabel}>Nume</span>
+          <input
+            className={styles.formInput}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            minLength={2}
+            required
+          />
+        </label>
+        <label className={styles.formField}>
+          <span className={styles.formLabel}>Categorie</span>
+          <select
+            className={styles.formInput}
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            required
+          >
+            <option value="">Alege…</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className={styles.formField}>
+          <span className={styles.formLabel}>Preț (MDL)</span>
+          <input
+            className={styles.formInput}
+            type="number"
+            min="1"
+            value={priceMdl}
+            onChange={(e) => setPriceMdl(e.target.value)}
+            required
+          />
+        </label>
+        <label className={styles.formField}>
+          <span className={styles.formLabel}>Document (.docx)</span>
+          <input
+            className={styles.formFile}
+            type="file"
+            accept=".docx"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            required
+          />
+        </label>
+      </div>
+
+      <label className={styles.formField}>
+        <span className={styles.formLabel}>Descriere</span>
+        <textarea
+          className={styles.formTextarea}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={2}
+          required
+        />
+      </label>
+
+      <div className={styles.formRow}>
+        <div className={styles.langGroup}>
+          <span className={styles.formLabel}>Limbi</span>
+          <div className={styles.langChips}>
+            {LANGUAGES.map((l) => (
+              <button
+                key={l.code}
+                type="button"
+                className={languages.includes(l.code) ? styles.langOn : styles.langOff}
+                onClick={() => toggleLang(l.code)}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <label className={styles.publishToggle}>
+          <input
+            type="checkbox"
+            checked={isPublished}
+            onChange={(e) => setIsPublished(e.target.checked)}
+          />
+          Publică imediat
+        </label>
+      </div>
+
+      {error && (
+        <p className={styles.formError} role="alert">
+          {error}
+        </p>
+      )}
+
+      <button type="submit" className={styles.formSubmit} disabled={busy}>
+        {busy ? 'Se procesează documentul…' : 'Adaugă șablonul'}
+      </button>
+    </form>
+  )
+}
+
 export function AdminPage() {
   const [stats, setStats] = useState<AdminStats | null>(null)
   const [revenue, setRevenue] = useState<MonthRevenue[]>([])
   const [orders, setOrders] = useState<AdminOrder[]>([])
   const [templates, setTemplates] = useState<AdminTemplate[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [showForm, setShowForm] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    Promise.all([fetchStats(), fetchRevenue(), fetchOrders(), fetchTemplates()])
-      .then(([s, r, o, t]) => {
+    Promise.all([fetchStats(), fetchRevenue(), fetchOrders(), fetchTemplates(), fetchCategories()])
+      .then(([s, r, o, t, c]) => {
         if (cancelled) return
         setStats(s)
         setRevenue(r)
         setOrders(o)
         setTemplates(t)
+        setCategories(c)
       })
       .catch(() => !cancelled && setError('Nu am putut încărca panoul de administrare.'))
     return () => {
@@ -94,6 +261,26 @@ export function AdminPage() {
     } catch {
       setError('Nu am putut actualiza șablonul.')
     }
+  }
+
+  async function handleDelete(template: AdminTemplate) {
+    if (!window.confirm(`Ștergi definitiv „${template.name}"?`)) return
+    setError(null)
+    try {
+      await deleteTemplate(template.id)
+      setTemplates((list) => list.filter((t) => t.id !== template.id))
+    } catch (caught) {
+      setError(
+        caught instanceof ApiError && caught.status === 409
+          ? 'Șablonul are vânzări și nu poate fi șters. Ascunde-l în schimb.'
+          : 'Nu am putut șterge șablonul.',
+      )
+    }
+  }
+
+  function handleCreated(created: AdminTemplate) {
+    setTemplates((list) => [created, ...list])
+    setShowForm(false)
   }
 
   const kpis = stats
@@ -174,7 +361,21 @@ export function AdminPage() {
       </section>
 
       <section className={styles.card}>
-        <h2 className={styles.cardTitle}>Șabloane</h2>
+        <div className={styles.sectionHead}>
+          <h2 className={styles.cardTitle}>Șabloane</h2>
+          <button
+            type="button"
+            className={styles.addButton}
+            onClick={() => setShowForm((open) => !open)}
+          >
+            {showForm ? 'Anulează' : '+ Adaugă șablon'}
+          </button>
+        </div>
+
+        {showForm && (
+          <AddTemplateForm categories={categories} onCreated={handleCreated} />
+        )}
+
         <div className={styles.tableWrap}>
           <table className={styles.table}>
             <thead>
@@ -183,6 +384,7 @@ export function AdminPage() {
                 <th>Categorie</th>
                 <th className={styles.right}>Preț</th>
                 <th className={styles.right}>Stare</th>
+                <th className={styles.right}>Acțiuni</th>
               </tr>
             </thead>
             <tbody>
@@ -198,6 +400,19 @@ export function AdminPage() {
                       onClick={() => void togglePublish(t)}
                     >
                       {t.is_published ? 'Publicat' : 'Ascuns'}
+                    </button>
+                  </td>
+                  <td className={styles.right}>
+                    <button
+                      type="button"
+                      className={styles.deleteButton}
+                      onClick={() => void handleDelete(t)}
+                      aria-label={`Șterge ${t.name}`}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      </svg>
                     </button>
                   </td>
                 </tr>

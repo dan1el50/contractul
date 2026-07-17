@@ -104,9 +104,14 @@ export function AppShell({ title, subtitle, children, headerRight }: Props) {
   const { user, logout } = useAuth()
   const { count } = useCart()
 
-  // Staff see the admin dashboard link; customers never do. This is
-  // convenience, not protection — the admin API enforces the real check.
-  const nav = user?.is_admin ? [...NAV, ADMIN_NAV] : NAV
+  // Admins don't shop — they manage. They own every contract, so the cart,
+  // wallet, and "my documents" links are meaningless to them; drop those and
+  // lead with the dashboard. Customers get the full shopping nav. Either way
+  // this is convenience, not protection — the admin API enforces the real check.
+  const customerOnly = new Set(['/documentele-mele', '/cos', '/portofel'])
+  const nav = user?.is_admin
+    ? [ADMIN_NAV, ...NAV.filter((item) => !customerOnly.has(item.to))]
+    : NAV
 
   return (
     <div className={styles.shell}>
