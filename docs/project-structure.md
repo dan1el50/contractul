@@ -145,12 +145,13 @@ frontend/
 │   ├── app/
 │   │   ├── router.tsx         Route definitions.
 │   │   ├── providers.tsx      Context providers composed in one place.
-│   │   └── layouts/           AppShell (sidebar + header), PublicLayout, AuthLayout.
+│   │   └── layouts/           AppShell (signed-in sidebar), PublicLayout (marketing
+│   │                          nav + footer), BrowseLayout (picks between them by auth).
 │   │
 │   ├── features/              Business features. The bulk of the code.
+│   │   ├── marketing/         The public Landing page.
 │   │   ├── auth/
-│   │   ├── catalog/
-│   │   ├── contract/
+│   │   ├── catalog/           Catalog + contract detail (public or in-app).
 │   │   ├── cart/
 │   │   ├── documents/
 │   │   ├── wallet/
@@ -209,21 +210,21 @@ React-based prototype runtime that has nothing to do with our React application.
 invites drift, and a stale prototype is worse than none because people trust it.
 
 Deleted so far (implemented in React): `Autentificare`, `Sidebar`, `Catalog Sabloane`,
-`Detaliu Contract`, `Portofel`, `Adauga Card`.
+`Detaliu Contract`, `Portofel`, `Adauga Card`, `Landing`.
 
 Still present, because they are still the only specification for screens not yet built:
 
 | File | Needed for |
 | --- | --- |
-| `Landing.dc.html` | the public landing page (phase 4, unfinished) |
 | `Cos.dc.html`, `Confirmare.dc.html` | checkout (phase 6) |
 | `Documentele Mele.dc.html` | documents (phase 7) |
 | `Setari.dc.html` | settings (phase 8) |
 | `Dashboard Admin.dc.html` | admin (phase 9) |
 
 `support.js` and `assets/image-slot.js` stay while any prototype does — they are its
-runtime. `assets/smartpath-*.png` are Crowe brand textures and outlive the prototype: they
-graduate to `frontend/src/assets/` when Landing is built.
+runtime. `assets/smartpath-*.png` are Crowe brand textures: they were **copied** into
+`frontend/src/assets/` when Landing shipped, and the originals stay in `assets/` while the
+remaining prototypes reference them. All of `assets/` goes when the last screen ships.
 
 When the last screen ships, all of it goes.
 

@@ -50,7 +50,7 @@ export function AuthPage() {
       } else {
         await login({ email, password })
       }
-      navigate('/', { replace: true })
+      navigate('/catalog', { replace: true })
     } catch (caught) {
       // The API's message is already in Romanian and already careful not to
       // reveal whether an account exists. Rewriting it here would risk undoing

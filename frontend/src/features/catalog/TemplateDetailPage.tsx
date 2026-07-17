@@ -12,7 +12,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import { AppShell } from '@/app/layouts/AppShell'
+import { BrowseLayout } from '@/app/layouts/BrowseLayout'
 import { ApiError } from '@/lib/api-client'
 
 import { fetchTemplate, previewUrl, type TemplateDetail } from './api'
@@ -54,22 +54,22 @@ export function TemplateDetailPage() {
 
   if (error) {
     return (
-      <AppShell title="Contract">
+      <BrowseLayout title="Contract">
         <p className={styles.error} role="alert">
           {error}
         </p>
-        <Link to="/" className={styles.back}>
-          ← Înapoi la panoul principal
+        <Link to="/catalog" className={styles.back}>
+          ← Înapoi la catalog
         </Link>
-      </AppShell>
+      </BrowseLayout>
     )
   }
 
   if (!template) {
     return (
-      <AppShell title="Contract">
+      <BrowseLayout title="Contract">
         <p className={styles.loading}>Se încarcă…</p>
-      </AppShell>
+      </BrowseLayout>
     )
   }
 
@@ -79,7 +79,7 @@ export function TemplateDetailPage() {
   )
 
   return (
-    <AppShell title={template.name} subtitle={template.category.name}>
+    <BrowseLayout title={template.name} subtitle={template.category.name}>
       <div className={styles.layout}>
         <div className={styles.left}>
           <section className={styles.intro}>
@@ -205,6 +205,6 @@ export function TemplateDetailPage() {
           </p>
         </aside>
       </div>
-    </AppShell>
+    </BrowseLayout>
   )
 }

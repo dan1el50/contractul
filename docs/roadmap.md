@@ -125,9 +125,9 @@ Two things this phase turned up, both recorded where they happened:
   now imports `app.main` in a fresh subprocess, and was verified to fail against the
   original bug — a guard nobody has watched fail is not a guard.
 
-### 4 — Catalog
+### 4 — Catalog ✅ DONE
 
-**Branch:** `feat/catalog`
+**Branch:** `feat/catalog`, `feat/landing`
 
 The first true vertical slice.
 
@@ -146,14 +146,22 @@ The first true vertical slice.
 **Why here:** read-only, so no transactional complexity. The point is to prove the slice
 pattern and settle the design system, not to fight the hard problems yet.
 
-**Status: mostly done.** The catalog, detail page, app shell, previews and tokens are
-built and verified in a browser. Two things remain:
+**Status: done.** The catalog, detail page, app shell, previews and tokens were built
+first; the public `Landing` page finished the phase on `feat/landing`, moving the catalog
+out from behind `RequireAuth`.
 
-- **The public `Landing` page is not built**, so the catalog sits behind `RequireAuth`
-  even though the API serves it publicly — a signed-out visitor has nowhere to land.
-  Building Landing moves the catalog out from behind the gate.
-- **The `.dc.html` files are still on disk.** They are untracked, so deleting them is
-  unrecoverable. They can go once they are either committed or confirmed disposable.
+How the public/private split settled:
+
+- **`/` is the public Landing page**, in a new `PublicLayout` (top nav + footer). Its hero
+  counts and category prices are read live from the catalog — the prototype's invented
+  "36+ tipuri / 1 480+ vândute" are gone, as are its "20% bonus" and "factură fiscală"
+  claims, which describe things we do not offer (see the wallet and numbering decisions).
+- **The catalog and detail pages are now public**, since a shop you must log in to browse
+  is a shop nobody browses. They use `BrowseLayout`, which picks chrome by auth state:
+  the sidebar `AppShell` when signed in, `PublicLayout` when signed out. Verified in a
+  real browser both ways. The wallet stays behind `RequireAuth`.
+- **The brand textures graduated** from the prototype's `assets/` into
+  `frontend/src/assets/`, as planned.
 
 **The paywall, as built.** Locked preview pages are rendered at 18 dpi and never at full
 resolution. The design's CSS blur is decoration over an image that is already unreadable —
