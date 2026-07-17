@@ -15,6 +15,7 @@ Documentation for **Contracte.md** — the self-service contract platform of Cro
 | --- | --- |
 | [architecture.md](architecture.md) | What the system is, the services it is made of, how a request flows through them, and the reasoning behind the technology choices. Start here. |
 | [project-structure.md](project-structure.md) | The full folder layout of the monorepo, what belongs in each directory, and the rules that keep it from drifting. |
+| [data-model.md](data-model.md) | Every PostgreSQL table, why it exists, and the rules the database itself enforces. |
 | [development-setup.md](development-setup.md) | Getting the stack running locally with Docker Compose: prerequisites, first run, everyday commands, and troubleshooting. |
 | [roadmap.md](roadmap.md) | The order the system gets built in, one branch per phase, and the reasoning behind that order. |
 
@@ -29,7 +30,6 @@ it*, and `roadmap.md` explains *what happens next*.
 Deliberately left for later branches, so that they can be written against real code
 rather than guesses:
 
-- **Data model** — the PostgreSQL schema (users, templates, orders, wallet, documents).
 - **API contract** — the REST endpoint specification. Until it is written, the
   auto-generated OpenAPI docs at `/docs` are the source of truth.
 - **Conventions and git workflow** — branching, commits, code style, testing strategy.

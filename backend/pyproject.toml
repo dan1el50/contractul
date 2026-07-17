@@ -38,6 +38,9 @@ packages = ["app"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+# The test database is created once per run, so the fixture that owns it must
+# outlive any single test's event loop.
+asyncio_default_fixture_loop_scope = "session"
 
 [tool.ruff]
 line-length = 100
