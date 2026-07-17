@@ -72,18 +72,25 @@ The spike went further than planned — it was promoted into real code rather th
 away, and its output drives the prototype's document preview. Phase 7 wires it to orders
 and storage.
 
-### 2 — Data model
+### 2 — Data model ✅ DONE
 
 **Branch:** `feat/data-model`
 
-Design the **whole** schema — users, templates, orders, wallet ledger, documents — and
-write it down. Implement migrations only for what phase 3 needs.
+The whole schema is designed and written down in [data-model.md](data-model.md); only
+`users` is implemented, because that is all phase 3 needs.
 
-Designing all of it upfront prevents rework, because the shape of the money side
-constrains everything around it. Implementing all of it upfront builds tables for
-features that are not yet specified.
+Delivered:
 
-**Done when:** the schema is documented in `docs/data-model.md` and the users table exists.
+- `docs/data-model.md` — every table, the constraints, and the reasoning
+- `users` table, migration `0002_users`, verified to upgrade and downgrade cleanly
+- Deterministic constraint naming on `Base.metadata`, set now while there is one table
+  rather than later when every constraint would need renaming
+- A database test harness: a throwaway `contractul_test` database, and a per-test
+  transaction that is always rolled back so tests cannot depend on execution order
+
+Three open questions are recorded at the bottom of the data model rather than guessed at:
+**VAT** (needed before phase 6), **order numbering** (gap-free numbering is far harder
+than it looks), and **refunds** (nobody has specified who may issue one).
 
 ### 3 — Authentication
 
