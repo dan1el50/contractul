@@ -1,0 +1,45 @@
+/**
+ * Design tokens — the Crowe brand, as used across the design prototype.
+ *
+ * These are the ONLY place colour, spacing, and font values are defined. No
+ * literals in components. The prototype hardcodes every value inline, which
+ * is right for a prototype and unmaintainable in a product — a brand tweak
+ * must be one edit here, not a hundred across the tree.
+ *
+ * Extended with the full scale in phase 4 (catalog), when there are real
+ * screens to serve. See docs/architecture.md#design-system.
+ */
+
+:root {
+  /* Brand */
+  --color-navy: #011e41; /* primary — sidebar, headings, dark sections */
+  --color-amber: #f5a800; /* calls to action */
+  --color-teal: #0c7876; /* success, "verified by Crowe" */
+  --color-blue: #003f9f;
+  --color-blue-light: #0075c9;
+
+  /* Surfaces */
+  --color-canvas: #eef1f5; /* app background behind cards */
+  --color-surface: #ffffff;
+  --color-border: #e6e9ee;
+
+  /* Text */
+  --color-text: #333333;
+  --color-text-muted: #828282;
+  --color-text-subtle: #9aa3b0;
+
+  /* Status */
+  --color-danger: #b3261e;
+
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius-card: 14px;
+  --radius-control: 9px;
+
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+}

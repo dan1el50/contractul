@@ -1,0 +1,58 @@
+# Base stack definition. Everything here is true in every environment.
+#
+# Local development conveniences — exposed ports, source mounts, hot reload —
+# live in docker-compose.override.yml, which Compose merges in automatically.
+
+name: contractul
+
+services:
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    healthcheck:
+      # backend waits on this, so it must test the database, not the process.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      # Host is `database` — the Compose service name. Inside a container,
+      # localhost is that container.
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
+      ENVIRONMENT: ${ENVIRONMENT}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      DOCUMENT_STORAGE_PATH: ${DOCUMENT_STORAGE_PATH}
+    volumes:
+      - document-storage:${DOCUMENT_STORAGE_PATH}
+    depends_on:
+      database:
+        # Not just "started" — Postgres accepts connections well after the
+        # container starts, and the difference is a crash loop on first run.
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  database-data:
+  # Rendered documents. Deleted by `docker compose down -v`, which is fine
+  # locally and would not be anywhere else.
+  document-storage:

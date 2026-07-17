@@ -1,0 +1,37 @@
+# Local development overrides. Compose merges this into docker-compose.yml
+# automatically — `docker compose up` picks it up with no extra flags.
+#
+# Everything here exists to make development pleasant and would be wrong in
+# production: exposed database ports, source code mounted over the image,
+# and servers running in reload mode.
+#
+# Note on volumes: Compose *appends* to the base list rather than replacing it,
+# so the volumes declared in docker-compose.yml are still mounted. Do not
+# repeat them here.
+
+services:
+  database:
+    ports:
+      # Exposed so you can connect a GUI client. If something else already
+      # holds 5432 — a local Postgres install, usually — change the left side.
+      - "5432:5432"
+
+  backend:
+    ports:
+      - "8000:8000"
+    volumes:
+      # Source mounted over the image so edits are live. The image still
+      # carries the installed dependencies.
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      # Anonymous volume keeps the image's node_modules from being shadowed
+      # by the host mount. Without this the container sees no dependencies —
+      # or, on Windows, sees ones built for the wrong platform.
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0 --port 5173
