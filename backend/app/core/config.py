@@ -37,6 +37,24 @@ class Settings(BaseSettings):
     # pretending to be production.
     cookie_secure: bool = False
 
+    # Whether to read the client IP from X-Forwarded-For instead of the socket
+    # peer. OFF by default and it must stay off until a reverse proxy sits in
+    # front: with no proxy, the header is entirely attacker-controlled and
+    # turning this on lets anyone forge a fresh identity per request, defeating
+    # every rate limit. When a proxy IS added, configure it to OVERWRITE the
+    # header with the real peer (nginx: `proxy_set_header X-Forwarded-For
+    # $remote_addr`) — appending is spoofable, overwriting is not.
+    trust_forwarded_for: bool = False
+
+    # Rate limits for the auth endpoints, per client IP. Login guards against
+    # password brute force; register against enumeration (its 409 confirms an
+    # email exists) and signup spam. Generous enough not to catch a real user
+    # fat-fingering a password, tight enough that a script cannot grind.
+    rate_limit_login_max: int = 10
+    rate_limit_login_window_seconds: int = 300
+    rate_limit_register_max: int = 5
+    rate_limit_register_window_seconds: int = 3600
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]

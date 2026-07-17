@@ -6,9 +6,9 @@ Everything that decides anything lives in app.services.auth.
 
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 
-from app.api.deps import CurrentUser, SessionDep, SessionToken
+from app.api.deps import CurrentUser, RateLimit, SessionDep, SessionToken
 from app.core.config import get_settings
 from app.schemas.auth import LoginRequest, RegisterRequest, UserResponse
 from app.services import auth as auth_service
@@ -35,7 +35,12 @@ def _set_session_cookie(response: Response, token: str) -> None:
     )
 
 
-@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(RateLimit("register"))],
+)
 async def register(payload: RegisterRequest, response: Response, session: SessionDep) -> UserResponse:
     try:
         user = await auth_service.register(
@@ -47,8 +52,9 @@ async def register(payload: RegisterRequest, response: Response, session: Sessio
         )
     except auth_service.EmailAlreadyRegistered:
         # 409, and it does confirm the email exists. Unavoidable: registration
-        # has to say why it failed or it is unusable. The mitigation belongs at
-        # the rate limiter, not here.
+        # has to say why it failed or it is unusable. The mitigation is the
+        # rate limit on this route, which caps how fast the oracle can be
+        # queried — not this handler.
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Un cont cu acest email există deja.",
@@ -61,7 +67,11 @@ async def register(payload: RegisterRequest, response: Response, session: Sessio
     return UserResponse.model_validate(user)
 
 
-@router.post("/login", response_model=UserResponse)
+@router.post(
+    "/login",
+    response_model=UserResponse,
+    dependencies=[Depends(RateLimit("login"))],
+)
 async def login(payload: LoginRequest, response: Response, session: SessionDep) -> UserResponse:
     try:
         user = await auth_service.authenticate(
