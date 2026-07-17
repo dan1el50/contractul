@@ -69,8 +69,7 @@ export function AuthPage() {
     <div className={styles.page}>
       <aside className={styles.brand}>
         <div>
-          <p className={styles.brandMark}>CONTRACTE.MD</p>
-          <p className={styles.brandSub}>Crowe Turcan Mikhailenko</p>
+          <p className={styles.brandMark}>CONTRACTUL.MD</p>
         </div>
 
         <div>
@@ -90,7 +89,7 @@ export function AuthPage() {
           </p>
         </div>
 
-        <p className={styles.copyright}>© 2026 Crowe Turcan Mikhailenko</p>
+        <p className={styles.copyright}>© 2026 Contractul.md</p>
       </aside>
 
       <main className={styles.formSide}>

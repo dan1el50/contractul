@@ -68,7 +68,7 @@ export function CatalogPage() {
   return (
     <BrowseLayout
       title="Catalog de contracte"
-      subtitle="Contracte verificate juridic de Crowe Turcan Mikhailenko"
+      subtitle="Contracte verificate juridic, conforme legislației Republicii Moldova"
     >
       <div className={styles.chips}>
         <button

@@ -1,5 +1,5 @@
 /**
- * Design tokens — the Crowe brand, as used across the design prototype.
+ * Design tokens — the brand, as used across the design prototype.
  *
  * These are the ONLY place colour, spacing, and font values are defined. No
  * literals in components. The prototype hardcodes every value inline, which
@@ -14,7 +14,7 @@
   /* Brand */
   --color-navy: #011e41; /* primary — sidebar, headings, dark sections */
   --color-amber: #f5a800; /* calls to action */
-  --color-teal: #0c7876; /* success, "verified by Crowe" */
+  --color-teal: #0c7876; /* success, "verified" */
   --color-blue: #003f9f;
   --color-blue-light: #0075c9;
 

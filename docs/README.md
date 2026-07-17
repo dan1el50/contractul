@@ -1,6 +1,6 @@
 # Documentation
 
-Documentation for **Contracte.md** — the self-service contract platform of Crowe Turcan Mikhailenko.
+Documentation for **Contractul.md** — the self-service contract platform.
 
 > **Status: target state, not current state.**
 > These documents describe the system we are building. At the time of writing, the

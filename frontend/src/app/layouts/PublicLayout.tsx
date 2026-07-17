@@ -24,8 +24,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
       <header className={styles.nav}>
         <div className={styles.navInner}>
           <Link to="/" className={styles.brand}>
-            <span className={styles.brandMark}>CONTRACTE.MD</span>
-            <span className={styles.brandSub}>Crowe Turcan Mikhailenko</span>
+            <span className={styles.brandMark}>CONTRACTUL.MD</span>
           </Link>
 
           <nav className={styles.links}>
@@ -44,8 +43,8 @@ export function PublicLayout({ children }: { children: ReactNode }) {
                 <Link to="/autentificare" className={styles.signIn}>
                   Autentificare
                 </Link>
-                <Link to="/catalog" className={styles.cta}>
-                  Vezi contractele
+                <Link to="/autentificare" className={styles.cta}>
+                  Creează cont
                 </Link>
               </>
             )}
@@ -58,9 +57,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
       <footer className={styles.footer}>
         <div className={styles.footerGrid}>
           <div>
-            <p className={styles.footBrand}>CONTRACTE.MD</p>
+            <p className={styles.footBrand}>CONTRACTUL.MD</p>
             <p className={styles.footText}>
-              Crowe Turcan Mikhailenko — aducem claritate și simplificăm complexitatea juridică.
+              Documente juridice conforme legislației Republicii Moldova, gata în câteva minute.
             </p>
           </div>
 
@@ -87,7 +86,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
 
         <div className={styles.footBar}>
           <div className={styles.footBarInner}>
-            © 2026 Crowe Turcan Mikhailenko. Toate drepturile rezervate.
+            © 2026 Contractul.md. Toate drepturile rezervate.
           </div>
         </div>
       </footer>

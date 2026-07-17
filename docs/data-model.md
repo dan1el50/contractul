@@ -88,7 +88,7 @@ receipt.
 | `password_hash` | TEXT NOT NULL | Argon2. Never the password. |
 | `full_name` | TEXT NOT NULL | |
 | `phone` | TEXT NULL | Optional; not every buyer gives one. |
-| `is_admin` | BOOLEAN NOT NULL DEFAULT false | Crowe staff. |
+| `is_admin` | BOOLEAN NOT NULL DEFAULT false | Internal staff. |
 | `is_active` | BOOLEAN NOT NULL DEFAULT true | Deactivate rather than delete — a deleted user orphans orders. |
 | `created_at` | TIMESTAMPTZ NOT NULL | |
 | `updated_at` | TIMESTAMPTZ NOT NULL | |
@@ -100,7 +100,7 @@ database but costs an extension we would otherwise not need; normalising on writ
 enough provided it happens in exactly one place.
 
 **`is_admin` is a boolean, not a role table.** There are two kinds of people here:
-customers and Crowe staff. A roles-and-permissions system would be built for a requirement
+customers and internal staff. A roles-and-permissions system would be built for a requirement
 nobody has stated. It becomes a table the day a third kind appears.
 
 ### `sessions` — implemented (phase 3)

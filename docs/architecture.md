@@ -2,11 +2,10 @@
 
 ## What we are building
 
-Contracte.md is a self-service shop for legal contracts. A customer picks a contract
+Contractul.md is a self-service shop for legal contracts. A customer picks a contract
 template, fills in a guided form, pays for it, and downloads the finished document as a
-PDF and an editable Word file. The templates are drafted and kept current by the lawyers
-of Crowe Turcan Mikhailenko, and the documents comply with the legislation of the
-Republic of Moldova.
+PDF and an editable Word file. The templates are drafted and kept current by lawyers,
+and the documents comply with the legislation of the Republic of Moldova.
 
 The product exists because the alternative — engaging a lawyer for a standard contract —
 is slow and expensive relative to the work involved. The platform sells the lawyers'
@@ -16,7 +15,7 @@ judgment once, as a template, and then delivers it many times without their invo
 
 - **Customers** — mostly Moldovan businesses (SRLs) and individuals who need a standard
   contract quickly. They browse the catalog, buy, and download.
-- **Administrators** — Crowe staff. They maintain the template catalog, review the order
+- **Administrators** — internal staff. They maintain the template catalog, review the order
   queue, and monitor revenue.
 
 ### What shapes the design
@@ -241,7 +240,7 @@ the limit is free to dodge.
 
 ## Design system
 
-The visual language is settled and comes from the Crowe brand, already applied across the
+The visual language is settled and comes from the brand, already applied across the
 twelve prototype screens. The React implementation must extract these into tokens rather
 than repeat literals — the prototype hardcodes them inline, which is correct for a
 prototype and wrong for a product.
@@ -250,14 +249,14 @@ prototype and wrong for a product.
 | --- | --- | --- |
 | Navy | `#011E41` | Primary. Sidebar, headings, dark sections. |
 | Amber | `#F5A800` | Calls to action. |
-| Teal | `#0C7876` | Success, "verified by Crowe". |
+| Teal | `#0C7876` | Success, "verified". |
 | Blue | `#003F9F` / `#0075C9` | Links and informational accents. |
 | App background | `#EEF1F5` | Canvas behind cards. |
 | Card border | `#E6E9EE` | Card and divider strokes. |
 | Typography | Helvetica Neue | Whole interface. |
 
 Cards use 14–16px radii. Icons are inline Feather-style SVG strokes. The
-`assets/smartpath-*.png` textures are Crowe brand assets and carry over as-is.
+`assets/smartpath-*.png` textures are brand assets and carry over as-is.
 
 The prototype's twelve screens map to the application's routes: a public landing page and
 authentication, a customer area (catalog, contract detail, cart, confirmation, my

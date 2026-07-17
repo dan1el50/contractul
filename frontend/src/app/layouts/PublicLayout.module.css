@@ -69,9 +69,19 @@
 }
 
 .signIn {
+  height: 42px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--color-navy);
+  border-radius: var(--radius-control);
   font-size: 14px;
   font-weight: 600;
   color: var(--color-navy);
+}
+
+.signIn:hover {
+  background: rgba(1, 30, 65, 0.04);
 }
 
 .cta {

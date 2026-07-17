@@ -1,5 +1,5 @@
 /**
- * HTTP client for the Contracte.md API.
+ * HTTP client for the Contractul.md API.
  *
  * The single place the frontend talks to the backend.
  */

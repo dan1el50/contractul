@@ -159,7 +159,7 @@ async def top_up(
     charge = provider.charge(
         amount_bani=amount_bani,
         card_token=card.provider_token,
-        description=f"Alimentare portofel Contracte.md",
+        description="Alimentare portofel Contractul.md",
     )
 
     logger.info("Top-up %s bani for user %s (charge %s)", amount_bani, user_id, charge.charge_id)

@@ -104,7 +104,7 @@ export function AppShell({ title, subtitle, children, headerRight }: Props) {
   const { user, logout } = useAuth()
   const { count } = useCart()
 
-  // Crowe staff see the admin dashboard link; customers never do. This is
+  // Staff see the admin dashboard link; customers never do. This is
   // convenience, not protection — the admin API enforces the real check.
   const nav = user?.is_admin ? [...NAV, ADMIN_NAV] : NAV
 
@@ -112,8 +112,7 @@ export function AppShell({ title, subtitle, children, headerRight }: Props) {
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
         <Link to="/" className={styles.brand}>
-          <p className={styles.brandMark}>CONTRACTE.MD</p>
-          <p className={styles.brandSub}>Crowe Turcan Mikhailenko</p>
+          <p className={styles.brandMark}>CONTRACTUL.MD</p>
         </Link>
 
         <nav className={styles.nav}>
