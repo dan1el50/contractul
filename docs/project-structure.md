@@ -205,19 +205,27 @@ the flows, the visual system, and the copy.
 They are **not source code and none of it carries over.** They run on `support.js`, a
 React-based prototype runtime that has nothing to do with our React application.
 
-Planned handling:
+**A prototype is deleted the moment its screen ships**, in the same PR. Keeping both
+invites drift, and a stale prototype is worse than none because people trust it.
 
-1. **Now** — they stay at the root, untouched. They still need to be openable.
-2. **When frontend work starts** — they move to `design/` so the root reflects the real
-   structure. Move them together with `support.js` and `assets/` so the relative paths
-   keep working. `uploads/` (the Crowe brand PDFs) moves there too.
-3. **When a screen is implemented in React** — the corresponding `.dc.html` is deleted in
-   the same PR. The React implementation replaces it; keeping both invites drift, and a
-   stale prototype is worse than no prototype because people trust it.
-4. **When the last screen ships** — `design/` is deleted entirely. `assets/` graduates to
-   `frontend/src/assets/`.
+Deleted so far (implemented in React): `Autentificare`, `Sidebar`, `Catalog Sabloane`,
+`Detaliu Contract`, `Portofel`, `Adauga Card`.
 
-Brand assets survive this. The prototype does not.
+Still present, because they are still the only specification for screens not yet built:
+
+| File | Needed for |
+| --- | --- |
+| `Landing.dc.html` | the public landing page (phase 4, unfinished) |
+| `Cos.dc.html`, `Confirmare.dc.html` | checkout (phase 6) |
+| `Documentele Mele.dc.html` | documents (phase 7) |
+| `Setari.dc.html` | settings (phase 8) |
+| `Dashboard Admin.dc.html` | admin (phase 9) |
+
+`support.js` and `assets/image-slot.js` stay while any prototype does — they are its
+runtime. `assets/smartpath-*.png` are Crowe brand textures and outlive the prototype: they
+graduate to `frontend/src/assets/` when Landing is built.
+
+When the last screen ships, all of it goes.
 
 ## Conventions worth stating
 

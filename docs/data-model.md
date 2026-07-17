@@ -370,16 +370,59 @@ Beyond the primary keys and uniques above:
 | `contract_templates (category_id) WHERE is_published` | Catalog filtering, which only ever sees published rows. |
 | `documents (status) WHERE status IN ('pending','failed')` | Finding renders to retry. Partial, because the healthy rows are the overwhelming majority and are never scanned this way. |
 
+## Decisions (2026-07-17)
+
+Answered by the business. Recorded here because a decision that lives only in a chat log
+is a decision nobody can check later.
+
+### VAT is included in the price
+
+**A template's `price_bani` is the final, VAT-inclusive amount.** 900 MDL is what the
+customer pays; there is nothing to add at checkout.
+
+Moldovan VAT is 20%, so a 900 MDL document decomposes as 750 net + 150 VAT. That split is
+**derived for display, never stored** — storing it would create a third number that can
+disagree with the other two, and the price is the authority.
+
+Deriving it is exact in bani and must stay integer arithmetic:
+
+```python
+vat_bani = price_bani - (price_bani * 100) // 120   # 90000 -> 15000
+net_bani = price_bani - vat_bani                    # 90000 -> 75000
+```
+
+Note the order: compute VAT first and subtract. Computing net first and subtracting the
+other way rounds differently, and the two components must add back to exactly the price.
+
+**No fiscal invoice is generated.** The prototype's "factură fiscală automată" is marketing
+copy, not a requirement. This matters beyond the feature: a *factură fiscală* is a
+regulated document with legally mandated numbering issued through the state system. We
+issue none, which is what makes the order-numbering decision below safe.
+
+### Order numbers may have gaps
+
+**`CT-{year}-{sequence}`, from a plain PostgreSQL sequence. Gaps are fine.**
+
+Gap-free numbering would mean serialising every checkout behind one lock or counter table —
+every order in the system waiting on every other, plus a new failure mode, bought to
+satisfy a constraint nobody has. Gaps also arise correctly: a checkout that rolls back has
+already consumed its number, and the alternatives are handing out numbers only after
+success (the lock again) or renumbering history (worse than a gap).
+
+This is only safe because the number is **not a fiscal document**. It is a customer
+reference, like a support ticket. If real fiscal invoices ever arrive, their numbering is
+governed by law and issued elsewhere — a separate problem, not this one.
+
+### No wallet bonus
+
+The prototype's "bonus până la 20% la alimentare" is copy. There is no bonus scheme, and
+`top_up` credits exactly what was charged.
+
 ## Open questions
 
-Deliberately unresolved, and better answered with real data than guessed at now:
-
-- **VAT.** The design mentions an invoice but no VAT line. Moldovan VAT is 20%, and whether
-  prices are inclusive changes what `total_bani` means. Needs an answer from the finance
-  side before phase 6.
-- **Order numbering.** `CT-2026-0184` implies a per-year sequence. Concurrent checkouts
-  make gap-free numbering surprisingly hard; if the accountants can tolerate gaps this is
-  trivial, and if not it needs its own table and a lock.
-- **Refunds.** The ledger has a `refund` kind, but nothing in the design describes who may
-  issue one or what happens to the already-downloaded document.
+- **Refunds.** The ledger has a `refund` kind and `MockPaymentProvider` implements one, but
+  the policy is undecided: who may issue a refund, and what happens to a document the
+  customer has already downloaded? Unlike VAT this does not block phase 6 — an order can
+  be taken without knowing how it is reversed — but it blocks any refund UI, and the
+  question gets harder once real money has moved. Raised 2026-07-17; to be answered.
 </content>
