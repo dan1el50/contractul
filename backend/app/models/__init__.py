@@ -12,14 +12,20 @@ module. Importing them back would be a cycle, and a cycle that resolves in one
 import order and raises in the other passes tests while breaking the server.
 """
 
+from app.models.cart import Cart, CartItem
 from app.models.catalog import Category, ContractTemplate, TemplateVersion
+from app.models.order import Order, OrderItem
 from app.models.session import Session
 from app.models.wallet import PaymentCard, WalletTransaction
 from app.models.user import User
 
 __all__ = [
+    "Cart",
+    "CartItem",
     "Category",
     "ContractTemplate",
+    "Order",
+    "OrderItem",
     "PaymentCard",
     "Session",
     "TemplateVersion",

@@ -11,6 +11,7 @@ import type { ReactNode } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 import { useAuth } from '@/features/auth/AuthContext'
+import { useCart } from '@/features/cart/CartContext'
 
 import styles from './AppShell.module.css'
 
@@ -89,6 +90,7 @@ interface Props {
 
 export function AppShell({ title, subtitle, children, headerRight }: Props) {
   const { user, logout } = useAuth()
+  const { count } = useCart()
 
   return (
     <div className={styles.shell}>
@@ -112,6 +114,11 @@ export function AppShell({ title, subtitle, children, headerRight }: Props) {
                 {item.icon}
               </svg>
               <span className={styles.navLabel}>{item.label}</span>
+              {item.to === '/cos' && count > 0 && (
+                <span className={styles.badge} aria-label={`${count} în coș`}>
+                  {count}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

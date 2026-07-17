@@ -52,6 +52,10 @@ async def engine() -> AsyncGenerator[AsyncEngine, None]:
     # schema production does not have.
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # The order-number sequence is not a model, so create_all does not make
+        # it. The migration does in a real database; here we create it by hand
+        # so checkout can draw numbers. See app/models/order.py.
+        await conn.execute(text("CREATE SEQUENCE IF NOT EXISTS order_number_seq"))
 
     yield test_engine
 

@@ -210,13 +210,12 @@ React-based prototype runtime that has nothing to do with our React application.
 invites drift, and a stale prototype is worse than none because people trust it.
 
 Deleted so far (implemented in React): `Autentificare`, `Sidebar`, `Catalog Sabloane`,
-`Detaliu Contract`, `Portofel`, `Adauga Card`, `Landing`.
+`Detaliu Contract`, `Portofel`, `Adauga Card`, `Landing`, `Cos`, `Confirmare`.
 
 Still present, because they are still the only specification for screens not yet built:
 
 | File | Needed for |
 | --- | --- |
-| `Cos.dc.html`, `Confirmare.dc.html` | checkout (phase 6) |
 | `Documentele Mele.dc.html` | documents (phase 7) |
 | `Setari.dc.html` | settings (phase 8) |
 | `Dashboard Admin.dc.html` | admin (phase 9) |
