@@ -283,17 +283,37 @@ Delivered:
 has a backend — nothing to send, nothing to store — and a panel of switches that change
 nothing is worse than no panel. They return when a feature stands behind them.
 
-### 9 — Admin
+### 9 — Admin ✅ DONE
 
 **Branch:** `feat/admin`
 
-KPIs, revenue chart, order queue, template management.
+KPIs, a monthly revenue chart, recent orders, and template management, behind the admin
+guard. Verified end to end in a browser as a promoted admin: the dashboard reads real
+figures, and unpublishing a template hides it from the public catalog.
 
-**Retires:** `Dashboard Admin.dc.html`. `design/` is deleted; `assets/` graduates to
-`frontend/src/assets/`.
+**Retires:** `Dashboard Admin.dc.html`.
 
-**Why last:** it is internal. Nobody outside Crowe is blocked on it, which also makes it
-the easiest scope to cut if we run long.
+Delivered:
+
+- Admin aggregates (`/admin/stats`, `/admin/revenue`, `/admin/orders`) and template
+  management (`/admin/templates`, publish/unpublish), all behind `AdminUser` — 403 for a
+  signed-in customer, 401 for a stranger
+- The revenue series fills empty months to zero, so the chart has a continuous axis
+- `Dashboard Admin` with KPI cards, an inline-SVG revenue chart (no chart library — the
+  page stays self-contained), a recent-orders table, and a template list with a publish
+  toggle. The admin sidebar link and the `/admin` route appear only for admins
+
+**Two adaptations, both honest:**
+
+- The prototype's "De procesat" approval queue is gone. Our checkout completes a purchase
+  atomically, so nothing waits on manual approval.
+- **`assets/` does not graduate yet.** This phase was planned as the last screen, but phase
+  7 (`Documentele Mele`) is deferred until the real templates arrive, so its prototype — and
+  the `support.js` / `assets/` runtime it needs — stays. The brand textures were already
+  copied into `frontend/src/assets/` when Landing shipped; the rest of `assets/` goes when
+  phase 7 ships.
+
+**Why here:** it is internal. Nobody outside Crowe is blocked on it.
 
 ### 10 — Real payments
 

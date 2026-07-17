@@ -210,14 +210,16 @@ React-based prototype runtime that has nothing to do with our React application.
 invites drift, and a stale prototype is worse than none because people trust it.
 
 Deleted so far (implemented in React): `Autentificare`, `Sidebar`, `Catalog Sabloane`,
-`Detaliu Contract`, `Portofel`, `Adauga Card`, `Landing`, `Cos`, `Confirmare`, `Setari`.
+`Detaliu Contract`, `Portofel`, `Adauga Card`, `Landing`, `Cos`, `Confirmare`, `Setari`,
+`Dashboard Admin`.
 
-Still present, because they are still the only specification for screens not yet built:
+Still present, because it is still the only specification for the one screen not yet built:
 
 | File | Needed for |
 | --- | --- |
 | `Documentele Mele.dc.html` | documents (phase 7) |
-| `Dashboard Admin.dc.html` | admin (phase 9) |
+
+When that ships, all of `assets/`, `support.js`, and the last prototype go with it.
 
 `support.js` and `assets/image-slot.js` stay while any prototype does — they are its
 runtime. `assets/smartpath-*.png` are Crowe brand textures: they were **copied** into

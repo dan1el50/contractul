@@ -80,6 +80,18 @@ const NAV = [
   },
 ]
 
+const ADMIN_NAV = {
+  to: '/admin',
+  label: 'Administrare',
+  icon: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M3 9h18" />
+      <path d="M9 21V9" />
+    </>
+  ),
+}
+
 interface Props {
   title: string
   subtitle?: string
@@ -92,6 +104,10 @@ export function AppShell({ title, subtitle, children, headerRight }: Props) {
   const { user, logout } = useAuth()
   const { count } = useCart()
 
+  // Crowe staff see the admin dashboard link; customers never do. This is
+  // convenience, not protection — the admin API enforces the real check.
+  const nav = user?.is_admin ? [...NAV, ADMIN_NAV] : NAV
+
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
@@ -101,7 +117,7 @@ export function AppShell({ title, subtitle, children, headerRight }: Props) {
         </Link>
 
         <nav className={styles.nav}>
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

@@ -38,6 +38,9 @@ async def create_template(
         session.add(category)
         await session.flush()
 
+    # The version is built through the relationship, not added separately, so
+    # template.versions is populated in memory — a test reading template.versions
+    # then does not trigger a lazy load outside the async context.
     template = ContractTemplate(
         slug=slug,
         name=name or f"Contract {slug}",
@@ -46,18 +49,16 @@ async def create_template(
         price_bani=price_bani,
         languages=["ro", "ru"],
         is_published=True,
+        versions=[
+            TemplateVersion(
+                version=1,
+                docx_object_key=f"templates/{slug}/v1.docx",
+                page_count=page_count,
+                is_current=True,
+            )
+        ],
     )
     session.add(template)
-    await session.flush()
-
-    version = TemplateVersion(
-        template_id=template.id,
-        version=1,
-        docx_object_key=f"templates/{slug}/v1.docx",
-        page_count=page_count,
-        is_current=True,
-    )
-    session.add(version)
     await session.flush()
 
     return template

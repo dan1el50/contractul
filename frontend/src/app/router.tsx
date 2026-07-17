@@ -10,7 +10,9 @@
 
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
+import { AdminPage } from '@/features/admin/AdminPage'
 import { AuthPage } from '@/features/auth/AuthPage'
+import { RequireAdmin } from '@/features/auth/RequireAdmin'
 import { RequireAuth } from '@/features/auth/RequireAuth'
 import { CartPage } from '@/features/cart/CartPage'
 import { ConfirmationPage } from '@/features/cart/ConfirmationPage'
@@ -67,6 +69,14 @@ export function Router() {
             <RequireAuth>
               <SettingsPage />
             </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <RequireAdmin>
+              <AdminPage />
+            </RequireAdmin>
           }
         />
         {/* Unknown paths go to the public landing page. */}
