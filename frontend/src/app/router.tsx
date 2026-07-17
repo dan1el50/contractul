@@ -81,7 +81,7 @@ export function Router() {
           }
         />
         <Route
-          path="/admin"
+          path="/contractul_admin"
           element={
             <RequireAdmin>
               <AdminPage />
