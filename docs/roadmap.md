@@ -257,13 +257,31 @@ The payoff. The first point where the product does the thing it exists to do.
 
 **Depends on:** real `.docx` templates from the legal team. See below.
 
-### 8 — Settings
+### 8 — Settings ✅ DONE
 
 **Branch:** `feat/settings`
 
-Profile, company data, saved cards, notification preferences, password.
+Profile, company data, saved cards, and password. Verified end to end in a browser:
+edit the profile, save a company, change the password, sign back in with the new one.
 
 **Retires:** `Setari.dc.html`
+
+Delivered:
+
+- `companies` table (one per user, optional), migration `0007_companies`, with the IDNO
+  held to 13 digits — the database enforces the length, the schema the digits
+- Profile update (name and phone; email is not editable here — changing a login identity
+  is a weightier, separate operation), and a company get/upsert
+- A password change that **requires the current password and ends every other session** —
+  the same immediate-revocation stance that made sessions server-side in the first place.
+  Proven by a service test: a second open session dies the moment the owner changes the
+  password, while the current one survives
+- `Setări` with four tabs; the cards tab lists saved cards and links to the wallet to manage
+  them rather than duplicating that logic
+
+**Two prototype tabs were deliberately dropped:** "Notificări" and "Limbă și regiune". Neither
+has a backend — nothing to send, nothing to store — and a panel of switches that change
+nothing is worse than no panel. They return when a feature stands behind them.
 
 ### 9 — Admin
 

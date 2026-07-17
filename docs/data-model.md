@@ -10,7 +10,7 @@ enforces.
 >
 > Implemented so far: `users`, `sessions`, `categories`, `contract_templates`,
 > `template_versions`, `payment_cards`, `wallet_transactions`, `carts`, `cart_items`,
-> `orders`, `order_items`. Remaining: `companies` (phase 8) and `documents` (phase 7).
+> `orders`, `order_items`, `companies`. Remaining: `documents` (phase 7).
 
 ## Principles
 

@@ -14,6 +14,7 @@ import order and raises in the other passes tests while breaking the server.
 
 from app.models.cart import Cart, CartItem
 from app.models.catalog import Category, ContractTemplate, TemplateVersion
+from app.models.company import Company
 from app.models.order import Order, OrderItem
 from app.models.session import Session
 from app.models.wallet import PaymentCard, WalletTransaction
@@ -23,6 +24,7 @@ __all__ = [
     "Cart",
     "CartItem",
     "Category",
+    "Company",
     "ContractTemplate",
     "Order",
     "OrderItem",
