@@ -1,0 +1,227 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.sidebar {
+  width: 264px;
+  flex-shrink: 0;
+  background: var(--color-navy);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  padding: var(--space-6) 20px var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brandMark {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+}
+
+.brandSub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 3px;
+}
+
+.nav {
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.navItem,
+.navItemOn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 11px 15px;
+  border-radius: var(--radius-control);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.62);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background 0.15s;
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.navItemOn {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.09);
+  border-left: 3px solid var(--color-amber);
+  font-weight: 600;
+}
+
+.foot {
+  padding: var(--space-3);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.userBox {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: var(--space-3) 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  color: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.userText {
+  min-width: 0;
+}
+
+.userName {
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userEmail {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logout {
+  width: 100%;
+  margin-top: 6px;
+  height: 34px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-control);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.header {
+  height: 74px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-8);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--color-navy);
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.main {
+  padding: 28px var(--space-8);
+  flex: 1;
+}
+
+/* Sidebar becomes a bottom bar, as the prototype specified. */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    z-index: 200;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.28);
+  }
+
+  .brand,
+  .foot {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: row;
+    padding: 7px 6px;
+    gap: 2px;
+    width: 100%;
+  }
+
+  .navItem,
+  .navItemOn {
+    flex: 1;
+    flex-direction: column;
+    gap: 0;
+    justify-content: center;
+    padding: 9px 2px;
+    border-left: none;
+    border-radius: 12px;
+  }
+
+  .navLabel {
+    display: none;
+  }
+
+  .header {
+    padding: 0 var(--space-4);
+  }
+
+  .main {
+    padding: var(--space-4) var(--space-4) 104px;
+  }
+}

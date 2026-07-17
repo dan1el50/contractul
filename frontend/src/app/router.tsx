@@ -1,15 +1,18 @@
 /**
  * Routes.
  *
- * Thin for now — the app has two screens. Phase 4 brings the catalog, the app
- * shell, and the rest of the customer area.
+ * The catalog is behind RequireAuth for now. The API serves it publicly — you
+ * do not need an account to browse a shop — but the public Landing page is not
+ * built yet, so there is nowhere for a signed-out visitor to land. Phase 4's
+ * Landing work moves this.
  */
 
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import { AuthPage } from '@/features/auth/AuthPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
-import { HomePage } from '@/features/home/HomePage'
+import { CatalogPage } from '@/features/catalog/CatalogPage'
+import { TemplateDetailPage } from '@/features/catalog/TemplateDetailPage'
 
 export function Router() {
   return (
@@ -20,7 +23,15 @@ export function Router() {
           path="/"
           element={
             <RequireAuth>
-              <HomePage />
+              <CatalogPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/contract/:slug"
+          element={
+            <RequireAuth>
+              <TemplateDetailPage />
             </RequireAuth>
           }
         />

@@ -4,6 +4,7 @@ Anything more than one route needs: the database session, the current user,
 and the admin guard.
 """
 
+from functools import lru_cache
 from typing import Annotated
 
 from fastapi import Cookie, Depends, HTTPException, status
@@ -11,10 +12,31 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.db.session import get_session
+from app.integrations.storage.base import Storage
+from app.integrations.storage.local import LocalStorage
 from app.models.user import User
 from app.services import auth as auth_service
 
 SessionDep = Annotated[AsyncSession, Depends(get_session)]
+
+
+@lru_cache
+def _storage() -> Storage:
+    """The one place a concrete Storage is named.
+
+    Everything else depends on the Storage protocol and is handed an
+    implementation, so swapping the local filesystem for S3 changes this
+    function and nothing else. A service that imports LocalStorage directly
+    would make the interface decorative.
+    """
+    return LocalStorage(get_settings().document_storage_path)
+
+
+def get_storage() -> Storage:
+    return _storage()
+
+
+StorageDep = Annotated[Storage, Depends(get_storage)]
 
 
 async def get_session_token(
